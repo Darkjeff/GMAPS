@@ -29,11 +29,11 @@ CREATE TABLE llx_gmaps_gmaps_place(
 	fk_user_modif integer, 
 	import_key varchar(14), 
 	status smallint NOT NULL, 
-	fk_gamps_activity integer NOT NULL, 
+	fk_gmaps_activity integer NOT NULL, 
 	location_placeid varchar(50), 
 	location_address_raw varchar(200), 
 	location_name varchar(200), 
-	duration_start timestamp, 
-	duration_end timestamp
+	duration_start datetime, 
+	duration_end datetime
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

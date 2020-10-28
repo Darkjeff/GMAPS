@@ -112,12 +112,12 @@ class Gmaps_place extends CommonObject
 		'fk_user_modif' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'UserModif', 'enabled'=>'1', 'position'=>511, 'notnull'=>-1, 'visible'=>-2,),
 		'import_key' => array('type'=>'varchar(14)', 'label'=>'ImportId', 'enabled'=>'1', 'position'=>1000, 'notnull'=>-1, 'visible'=>-2,),
 		'status' => array('type'=>'smallint', 'label'=>'Status', 'enabled'=>'1', 'position'=>1000, 'notnull'=>1, 'visible'=>1, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Brouillon', '1'=>'Valid&eacute;', '9'=>'Annul&eacute;'),),
-		'fk_gamps_activity' => array('type'=>'integer:Gmaps_activity:gmaps/class/gmaps_activity.class.php:1', 'label'=>'Activity', 'enabled'=>'1', 'position'=>40, 'notnull'=>1, 'visible'=>-1, 'index'=>1,),
+		'fk_gmaps_activity' => array('type'=>'integer:Gmaps_activity:gmaps/class/gmaps_activity.class.php:1', 'label'=>'Activity', 'enabled'=>'1', 'position'=>40, 'notnull'=>1, 'visible'=>-1, 'index'=>1,),
 		'location_placeid' => array('type'=>'varchar(50)', 'label'=>'PlaceId', 'enabled'=>'1', 'position'=>40, 'notnull'=>-1, 'visible'=>1,),
 		'location_address_raw' => array('type'=>'varchar(200)', 'label'=>'PlaceAdress', 'enabled'=>'1', 'position'=>41, 'notnull'=>-1, 'visible'=>1,),
 		'location_name' => array('type'=>'varchar(200)', 'label'=>'PlaceName', 'enabled'=>'1', 'position'=>42, 'notnull'=>-1, 'visible'=>1,),
-		'duration_start' => array('type'=>'timestamp', 'label'=>'DurationStart', 'enabled'=>'1', 'position'=>43, 'notnull'=>-1, 'visible'=>1,),
-		'duration_end' => array('type'=>'timestamp', 'label'=>'DurationEnd', 'enabled'=>'1', 'position'=>44, 'notnull'=>-1, 'visible'=>1,),
+		'duration_start' => array('type'=>'datetime', 'label'=>'DurationStart', 'enabled'=>'1', 'position'=>43, 'notnull'=>-1, 'visible'=>1,),
+		'duration_end' => array('type'=>'datetime', 'label'=>'DurationEnd', 'enabled'=>'1', 'position'=>44, 'notnull'=>-1, 'visible'=>1,),
 	);
 	public $rowid;
 	public $ref;
@@ -132,7 +132,7 @@ class Gmaps_place extends CommonObject
 	public $fk_user_modif;
 	public $import_key;
 	public $status;
-	public $fk_gamps_activity;
+	public $fk_gmaps_activity;
 	public $location_placeid;
 	public $location_address_raw;
 	public $location_name;

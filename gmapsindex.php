@@ -82,20 +82,21 @@ $now = dol_now();
  * Actions
  */
 
-// Action submit/delete file/link
-include_once DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
-
 if ($action=='editfile') {
 	$action='';
 	$import = new Gmaps_import($db);
-	$result = $import->importFile($upload_dir.'/'.urlencode(GETPOST("urlfile")));
+	$result = $import->importFile($upload_dir.'/'.GETPOST("urlfile"), $user);
 	if ($result < 0) {
 		setEventMessages($import->error,$import->errors,'errors');
 	} else {
-
+		setEventMessage('ImportOK');
 	}
+	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 
+// Action submit/delete file/link
+include_once DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
 
 /*
  * View
@@ -139,15 +140,6 @@ $formfile->form_attach_new_file(
 	0
 );
 
-// Documents
-/*$urlsource = $_SERVER["PHP_SELF"];
-$genallowed = 0;
-$delallowed = 1;
-
-
-
-print $formfile->showdocuments($modulepart, 0, $filedir, $urlsource, $genallowed, $delallowed, '', 0, 0, 0, 28, 0, '', 0, '', $langs->default_lang, '', null);
-$somethingshown = $formfile->numoffiles;*/
 
 $filearray = dol_dir_list($upload_dir, "files", 0, '', '(\.meta|_preview.*\.png)$', $sortfield, (strtolower($sortorder) == 'desc' ?SORT_DESC:SORT_ASC), 1);
 

@@ -117,8 +117,8 @@ class Gmaps_activity extends CommonObject
 		'location_start_lat' => array('type'=>'integer', 'label'=>'LatitudeStart', 'enabled'=>'1', 'position'=>40, 'notnull'=>-1, 'visible'=>1,),
 		'location_end_long' => array('type'=>'integer', 'label'=>'LongitudeEnd', 'enabled'=>'1', 'position'=>42, 'notnull'=>-1, 'visible'=>1,),
 		'location_end_lat' => array('type'=>'integer', 'label'=>'LatitudeEnd', 'enabled'=>'1', 'position'=>43, 'notnull'=>-1, 'visible'=>1,),
-		'duration_start' => array('type'=>'timestamp', 'label'=>'DurationStart', 'enabled'=>'1', 'position'=>44, 'notnull'=>-1, 'visible'=>1,),
-		'duration_end' => array('type'=>'timestamp', 'label'=>'DurationEnd', 'enabled'=>'1', 'position'=>45, 'notnull'=>-1, 'visible'=>1,),
+		'duration_start' => array('type'=>'datetime', 'label'=>'DurationStart', 'enabled'=>'1', 'position'=>44, 'notnull'=>-1, 'visible'=>1,),
+		'duration_end' => array('type'=>'datetime', 'label'=>'DurationEnd', 'enabled'=>'1', 'position'=>45, 'notnull'=>-1, 'visible'=>1,),
 		'distance' => array('type'=>'integer', 'label'=>'Distance', 'enabled'=>'1', 'position'=>46, 'notnull'=>-1, 'visible'=>1,),
 	);
 	public $rowid;

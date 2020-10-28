@@ -21,7 +21,7 @@ ALTER TABLE llx_gmaps_gmaps_place ADD INDEX idx_gmaps_gmaps_place_fk_soc (fk_soc
 ALTER TABLE llx_gmaps_gmaps_place ADD INDEX idx_gmaps_gmaps_place_fk_project (fk_project);
 ALTER TABLE llx_gmaps_gmaps_place ADD CONSTRAINT llx_gmaps_gmaps_place_fk_user_creat FOREIGN KEY (fk_user_creat) REFERENCES llx_user(rowid);
 ALTER TABLE llx_gmaps_gmaps_place ADD INDEX idx_gmaps_gmaps_place_status (status);
-ALTER TABLE llx_gmaps_gmaps_place ADD INDEX idx_gmaps_gmaps_place_fk_gamps_activity (fk_gamps_activity);
+ALTER TABLE llx_gmaps_gmaps_place ADD INDEX idx_gmaps_gmaps_place_fk_gmaps_activity (fk_gmaps_activity);
 -- END MODULEBUILDER INDEXES
 
 --ALTER TABLE llx_gmaps_gmaps_place ADD UNIQUE INDEX uk_gmaps_gmaps_place_fieldxy(fieldx, fieldy);
