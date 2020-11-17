@@ -370,7 +370,7 @@ class Gmaps_activity extends CommonObject
 	public function fetchPlaces()
 	{
 		$this->places = array();
-		dol_include_once('/gmaps/class/gmaps_gmaps_place.class.php');
+		dol_include_once('/gmaps/class/gmaps_place.class.php');
 
 		$place = new Gmaps_place($this->db);
 		$result = $place->fetchAll('','', 0, 0, array('t.fk_gmaps_activity'=>$this->id));
