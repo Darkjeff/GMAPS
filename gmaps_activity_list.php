@@ -242,7 +242,25 @@ if (empty($reshook))
 		} else {
 			setEventMessage('Please select at leat One row','errors');
 		}
+	}
+	if ($massaction=='set_status_canceled' && $permissiontoadd) {
+		if (!empty($toselect)) {
+			foreach($toselect as $kay=>$val) {
+				$act = new Gmaps_activity($db);
+				$result=$act->fetch($val);
+				if ($result < 0) {
+					setEventMessages($act->error,$act->errors,'errors');
+				} elseif($result > 0) {
+					$$result_Upd = $act->setStatut(Gmaps_activity::STATUS_CANCELED,$val);
+					if ($result_Upd < 0) {
+						setEventMessages($act->error,$act->errors,'errors');
+					}
+				}
 
+			}
+		} else {
+			setEventMessage('Please select at leat One row','errors');
+		}
 	}
 }
 
@@ -416,6 +434,7 @@ $param .= $hookmanager->resPrint;
 // List of mass actions available
 $arrayofmassactions = array(
 	'affect_fk_soc'=>$langs->trans("AffectThirdparty"),
+	'set_status_canceled'=>$langs->trans("SetSatusCancelled"),
 	//'generate_doc'=>$langs->trans("ReGeneratePDF"),
 	//'builddoc'=>$langs->trans("PDFMerge"),
 	//'presend'=>$langs->trans("SendByMail"),
