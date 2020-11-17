@@ -121,6 +121,9 @@ class Gmaps_import extends CommonObject
 	// END MODULEBUILDER PROPERTIES
 
 
+	public $warnings=array();
+
+
 	// If this object has a subtable with lines
 
 	/**
@@ -1009,7 +1012,6 @@ class Gmaps_import extends CommonObject
 								$gmapsActivity->location_end_lat = $activitySegment->endLocation->latitudeE7;
 								$gmapsActivity->duration_start = round(((int) $activitySegment->duration->startTimestampMs)*0.001);
 								$gmapsActivity->duration_end = round(((int) $activitySegment->duration->endTimestampMs)*0.001);
-								$gmapsActivity->distance = $activitySegment->distance;
 								$gmapsActivity->status = Gmaps_activity::STATUS_VALIDATED;
 
 								$result = $gmapsActivity->create($user);
@@ -1021,9 +1023,8 @@ class Gmaps_import extends CommonObject
 								}
 
 							} else {
-								$this->errors[] = $langs->trans('activitySegmentBadFormat');
+								$this->warnings[] = $langs->trans('activitySegmentBadFormat');
 								dol_syslog($langs->trans('activitySegmentBadFormat').':'.var_export($data,true), LOG_ERR);
-								$error++;
 							}
 						}
 						if (property_exists($data, 'placeVisit') && !empty($new_gmapsActivityId)) {
@@ -1049,9 +1050,8 @@ class Gmaps_import extends CommonObject
 									$error++;
 								}
 							} else {
-								$this->errors[] = $langs->trans('placeVisitBadFormat');
+								$this->warnings[] = $langs->trans('placeVisitBadFormat');
 								dol_syslog($langs->trans('placeVisitBadFormat').':'.var_export($data,true), LOG_ERR);
-								$error++;
 							}
 						}
 					}

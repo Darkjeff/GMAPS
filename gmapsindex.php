@@ -91,6 +91,9 @@ if ($action=='editfile') {
 	} else {
 		setEventMessage('ImportOK');
 	}
+	if (!empty($import->warnings)) {
+		setEventMessages(null,$import->warnings,'warnings');
+	}
 	header("Location: ".$_SERVER['PHP_SELF']);
 	exit;
 }
@@ -162,7 +165,7 @@ $formfile->list_of_documents(
 	$upload_dir,
 	$sortfield,
 	$sortorder,
-	0
+	1
 );
 
 

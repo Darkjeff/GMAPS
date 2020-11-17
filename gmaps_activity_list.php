@@ -534,6 +534,13 @@ while ($i < ($limit ? min($num, $limit) : $num))
 		{
 			print '<td'.($cssforfield ? ' class="'.$cssforfield.'"' : '').'>';
 			if ($key == 'status') print $object->getLibStatut(5);
+
+
+			elseif ($key == 'fk_soc') {
+				#Spécial case of fk_soc to affect if
+				print $object->showInputField($val, $key.'', $object->$key, '', '_'.$key['rowid'], '', 0, 1);
+			}
+
 			else print $object->showOutputField($val, $key, $object->$key, '');
 			print '</td>';
 			if (!$i) $totalarray['nbfield']++;
