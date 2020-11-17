@@ -338,19 +338,9 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	$linkback = '<a href="'.dol_buildpath('/gmaps/gmaps_activity_list.php', 1).'?restore_lastsearch_values=1'.(!empty($socid) ? '&socid='.$socid : '').'">'.$langs->trans("BackToList").'</a>';
 
 	$morehtmlref = '<div class="refidno">';
-
-	if (!empty($object->places)) {
-		foreach($object->places as $key=>$place) {
-			//var_dump($place);
-			print $place->location_name.'<BR>';
-		}
-	}
 	$morehtmlref .= '</div>';
 
-
-
 	dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
-
 
 	print '<div class="fichecenter">';
 	print '<div class="fichehalfleft">';
@@ -363,12 +353,40 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	//unset($object->fields['fk_soc']);					// Hide field already shown in banner
 	include DOL_DOCUMENT_ROOT.'/core/tpl/commonfields_view.tpl.php';
 
+	print '</table>';
+	print '</div>';
+	print '<div class="fichehalfright">';
+	print '<div class="ficheaddleft">';
+	print '<div class="underbanner clearboth"></div>';
+	print '<table class="border centpercent tableforfield">'."\n";
+	print '<tr><td';
+	print ' class="titlefield fieldname_'.'places';
+	print '">';
+	print $langs->trans('Places');
+	print '</td>';
+	print '<td class="valuefield fieldname_'.'places';
+	print '">';
+	if (!empty($object->places)) {
+		print '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">';
+		foreach($object->places as $key=>$place) {
+
+			$txt=$place->location_name.'<BR>'.$place->location_address_raw;
+			print '<li class="select2-search-choice-dolibarr noborderoncategories" style="background: #aaa">'.$txt.'</span></li>';
+
+
+		}
+		print '</ul></div>';
+	}
+	print '</td>';
+	print '</tr>';
 	// Other attributes. Fields from hook formObjectOptions and Extrafields.
 	include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_view.tpl.php';
 
 	print '</table>';
 	print '</div>';
 	print '</div>';
+	print '</div>';
+
 
 	print '<div class="clearboth"></div>';
 
