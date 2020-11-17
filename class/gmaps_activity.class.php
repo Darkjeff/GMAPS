@@ -169,10 +169,10 @@ class Gmaps_activity extends CommonObject
 
 	/**
 	 * @var array    List of child tables. To know object to delete on cascade.
-	 *               If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
+	 *               If name matches '@ClassNAme:FilePathClass:ParentFkFieldName' it will
 	 *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
 	 */
-	//protected $childtablesoncascade = array('gmaps_gmaps_activitydet');
+	protected $childtablesoncascade = array('@Gmaps_place:/gmaps/class/gmaps_place.class.php:fk_gmaps_activity');
 
 	/**
 	 * @var Gmaps_activityLine[]     Array of subtable lines
