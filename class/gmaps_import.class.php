@@ -1021,7 +1021,8 @@ class Gmaps_import extends CommonObject
 								}
 
 							} else {
-								$this->errors[] = $langs->trans('ActivitySegmentBadFormat');
+								$this->errors[] = $langs->trans('activitySegmentBadFormat');
+								dol_syslog($langs->trans('activitySegmentBadFormat').':'.var_export($data,true), LOG_ERR);
 								$error++;
 							}
 						}
@@ -1048,7 +1049,8 @@ class Gmaps_import extends CommonObject
 									$error++;
 								}
 							} else {
-								$this->errors[] = $langs->trans('ActivitySegmentBadFormat');
+								$this->errors[] = $langs->trans('placeVisitBadFormat');
+								dol_syslog($langs->trans('placeVisitBadFormat').':'.var_export($data,true), LOG_ERR);
 								$error++;
 							}
 						}
