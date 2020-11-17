@@ -1012,6 +1012,7 @@ class Gmaps_import extends CommonObject
 								$gmapsActivity->location_end_lat = $activitySegment->endLocation->latitudeE7;
 								$gmapsActivity->duration_start = round(((int) $activitySegment->duration->startTimestampMs)*0.001);
 								$gmapsActivity->duration_end = round(((int) $activitySegment->duration->endTimestampMs)*0.001);
+								$gmapsActivity->distance = $activitySegment->distance;
 								$gmapsActivity->status = Gmaps_activity::STATUS_VALIDATED;
 
 								$result = $gmapsActivity->create($user);

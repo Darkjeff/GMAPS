@@ -331,7 +331,6 @@ if ($num == 1 && !empty($conf->global->MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE) && $
 	exit;
 }
 
-
 // Output page
 // --------------------------------------------------------------------
 
@@ -518,6 +517,7 @@ while ($i < ($limit ? min($num, $limit) : $num))
 
 	// Show here line of result
 	print '<tr class="oddeven">';
+
 	foreach ($object->fields as $key => $val)
 	{
 		$cssforfield = (empty($val['css']) ? '' : $val['css']);
@@ -538,7 +538,7 @@ while ($i < ($limit ? min($num, $limit) : $num))
 
 			elseif ($key == 'fk_soc') {
 				#Spécial case of fk_soc to affect if
-				print $object->showInputField($val, $key.'', $object->$key, '', '_'.$key['rowid'], '', 0, 1);
+				print $object->showInputField($val, $key.'', $object->$key, '', '_'.$object->id, '', 0, 1);
 			}
 
 			else print $object->showOutputField($val, $key, $object->$key, '');
