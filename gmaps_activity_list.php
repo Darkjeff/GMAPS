@@ -296,14 +296,14 @@ foreach ($search as $key => $val)
 		}
 		if ($search[$key] != '') $sql .= natural_search($key, $search[$key], (($key == 'status') ? 2 : $mode_search));
 	} else {
-		if(strpos($key,'_start')!==false || strpos($key,'_end')!==false && $search[$key] != '') {
-			$new_key=str_replace(array('_start','_end'),'',$key);
-			if (preg_match('/^(date|timestamp|datetime)/', $object->fields[$new_key]['type'])) {
-				if (strpos($key,'_start')!==false) {
-					$sql .= " AND t." . $new_key . " >= '" . $db->idate($search[$key]) . "'";
+		if(preg_match('/(_start|_end)$/', $key) && $search[$key] != '') {
+			$columnName=preg_replace('/(_start|_end)$/', '', $key);;
+			if (preg_match('/^(date|timestamp|datetime)/', $object->fields[$columnName]['type'])) {
+				if (preg_match('/_start$/', $key)) {
+					$sql .= " AND t." . $columnName . " >= '" . $db->idate($search[$key]) . "'";
 				}
-				if (strpos($key,'_end')!==false) {
-					$sql .= " AND t." . $new_key . " <= '" . $db->idate($search[$key]) . "'";
+				if (preg_match('/_end$/', $key)) {
+					$sql .= " AND t." . $columnName . " <= '" . $db->idate($search[$key]) . "'";
 				}
 			}
 		}
