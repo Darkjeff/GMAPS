@@ -63,6 +63,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formprojet.class.php';
 dol_include_once('/gmaps/class/gmaps_activity.class.php');
 dol_include_once('/gmaps/lib/gmaps_gmaps_activity.lib.php');
+dol_include_once('/gmaps/class/gmaps_gmaps_place.class.php');
 
 // Load translation files required by the page
 $langs->loadLangs(array("gmaps@gmaps", "other"));
@@ -370,7 +371,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	 }
 	 }
 	 }*/
+	$place = new gmaps_gmaps_place($db);
+	$place
 	$morehtmlref .= '</div>';
+
 
 
 	dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);

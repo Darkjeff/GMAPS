@@ -179,6 +179,11 @@ class Gmaps_activity extends CommonObject
 	 */
 	//public $lines = array();
 
+	/**
+	 * @var Gmaps_activityPlaces[]     Array of places linked
+	 */
+	public $places = array();
+
 
 
 	/**
@@ -357,6 +362,24 @@ class Gmaps_activity extends CommonObject
 		return $result;
 	}
 
+	/**
+	 * Load object lines in memory from the database
+	 *
+	 * @return int         <0 if KO, 0 if not found, >0 if OK
+	 */
+	public function fetchPlaces()
+	{
+		$this->places = array();
+		dol_include_once('/gmaps/class/gmaps_gmaps_place.class.php');
+
+		$place = new Gmaps_place($this->db);
+		$result = $place->fetchAll('','', 0, 0, array('t.fk_gmaps_activity'=>$this->id));
+		if (is_array($result) && count($result)>0) {
+			$this->places=$result;
+		} else {
+			return $result;
+		}
+	}
 
 	/**
 	 * Load list of objects in memory from the database.

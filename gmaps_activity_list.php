@@ -115,6 +115,10 @@ $search = array();
 foreach ($object->fields as $key => $val)
 {
 	if (GETPOST('search_'.$key, 'alpha') !== '') $search[$key] = GETPOST('search_'.$key, 'alpha');
+	if (preg_match('/^(date|timestamp|datetime)/', $val['type'])) {
+		$search[$key.'_start'] = dol_mktime(0, 0, 0, GETPOST('search_'.$key.'_startmonth', 'int'), GETPOST('search_'.$key.'_startday', 'int'), GETPOST('search_'.$key.'_startyear', 'int'));
+		$search[$key.'_end'] = dol_mktime(23, 59, 59, GETPOST('search_'.$key.'_endmonth', 'int'), GETPOST('search_'.$key.'_endday', 'int'), GETPOST('search_'.$key.'_endyear', 'int'));
+	}
 }
 
 // List of fields to search into when doing a "search in all"
@@ -199,6 +203,10 @@ if (empty($reshook))
 		foreach ($object->fields as $key => $val)
 		{
 			$search[$key] = '';
+			if (preg_match('/^(date|timestamp|datetime)/', $val['type'])) {
+				$search[$key.'_start'] = '';
+				$search[$key.'_end'] = '';
+			}
 		}
 		$toselect = '';
 		$search_array_options = array();
@@ -214,6 +222,28 @@ if (empty($reshook))
 	$objectlabel = 'Gmaps_activity';
 	$uploaddir = $conf->gmaps->dir_output;
 	include DOL_DOCUMENT_ROOT.'/core/actions_massactions.inc.php';
+
+	if ($massaction=='affect_fk_soc' && $permissiontoadd) {
+		if (!empty($toselect)) {
+			foreach($toselect as $kay=>$val) {
+				$act = new Gmaps_activity($db);
+				$result=$act->fetch($val);
+				if ($result < 0) {
+					setEventMessages($act->error,$act->errors,'errors');
+				} elseif($result > 0) {
+					$act->fk_soc=GETPOST('affect_fk_soc_'.$val);
+					$result_Upd=$act->update($user);
+					if ($result_Upd < 0) {
+						setEventMessages($act->error,$act->errors,'errors');
+					}
+				}
+
+			}
+		} else {
+			setEventMessage('Please select at leat One row','errors');
+		}
+
+	}
 }
 
 
@@ -257,13 +287,27 @@ if ($object->ismultientitymanaged == 1) $sql .= " WHERE t.entity IN (".getEntity
 else $sql .= " WHERE 1 = 1";
 foreach ($search as $key => $val)
 {
-	if ($key == 'status' && $search[$key] == -1) continue;
-	$mode_search = (($object->isInt($object->fields[$key]) || $object->isFloat($object->fields[$key])) ? 1 : 0);
-	if (strpos($object->fields[$key]['type'], 'integer:') === 0) {
-		if ($search[$key] == '-1') $search[$key] = '';
-		$mode_search = 2;
+	if (in_array($key,$object->fields)) {
+		if ($key == 'status' && $search[$key] == -1) continue;
+		$mode_search = (($object->isInt($object->fields[$key]) || $object->isFloat($object->fields[$key])) ? 1 : 0);
+		if (strpos($object->fields[$key]['type'], 'integer:') === 0) {
+			if ($search[$key] == '-1') $search[$key] = '';
+			$mode_search = 2;
+		}
+		if ($search[$key] != '') $sql .= natural_search($key, $search[$key], (($key == 'status') ? 2 : $mode_search));
+	} else {
+		if(strpos($key,'_start')!==false || strpos($key,'_end')!==false && $search[$key] != '') {
+			$new_key=str_replace(array('_start','_end'),'',$key);
+			if (preg_match('/^(date|timestamp|datetime)/', $object->fields[$new_key]['type'])) {
+				if (strpos($key,'_start')!==false) {
+					$sql .= " AND t." . $new_key . " >= '" . $db->idate($search[$key]) . "'";
+				}
+				if (strpos($key,'_end')!==false) {
+					$sql .= " AND t." . $new_key . " <= '" . $db->idate($search[$key]) . "'";
+				}
+			}
+		}
 	}
-	if ($search[$key] != '') $sql .= natural_search($key, $search[$key], (($key == 'status') ? 2 : $mode_search));
 }
 if ($search_all) $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
 //$sql.= dolSqlDateFilter("t.field", $search_xxxday, $search_xxxmonth, $search_xxxyear);
@@ -338,17 +382,17 @@ llxHeader('', $title, $help_url);
 
 // Example : Adding jquery code
 print '<script type="text/javascript" language="javascript">
-jQuery(document).ready(function() {
-	function init_myfunc()
-	{
-		jQuery("#myid").removeAttr(\'disabled\');
-		jQuery("#myid").attr(\'disabled\',\'disabled\');
-	}
-	init_myfunc();
-	jQuery("#mybutton").click(function() {
-		init_myfunc();
-	});
-});
+		// Add code to auto check the box when we select an Thridparty
+		jQuery(document).ready(function() {
+			jQuery("[name^=\'affect_fk_soc_\']").change(function() {
+			let s=$(this).attr("id").replace("affect_fk_soc_", "");
+			if ($(this).val() == -1) jQuery("#cb"+s).prop("checked", false);
+			else jQuery("#cb"+s).prop("checked", true);
+
+			// TODO run same script as on lick to display mass action list
+			initCheckForSelect(1);
+			});
+		});
 </script>';
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
@@ -371,7 +415,7 @@ $param .= $hookmanager->resPrint;
 
 // List of mass actions available
 $arrayofmassactions = array(
-	//'validate'=>$langs->trans("Validate"),
+	'affect_fk_soc'=>$langs->trans("AffectThirdparty"),
 	//'generate_doc'=>$langs->trans("ReGeneratePDF"),
 	//'builddoc'=>$langs->trans("PDFMerge"),
 	//'presend'=>$langs->trans("SendByMail"),
@@ -447,7 +491,16 @@ foreach ($object->fields as $key => $val)
 		if (is_array($val['arrayofkeyval'])) print $form->selectarray('search_'.$key, $val['arrayofkeyval'], $search[$key], $val['notnull'], 0, 0, '', 1, 0, 0, '', 'maxwidth100', 1);
 		elseif (strpos($val['type'], 'integer:') === 0) {
 			print $object->showInputField($val, $key, $search[$key], '', '', 'search_', 'maxwidth150', 1);
-		} elseif (!preg_match('/^(date|timestamp)/', $val['type'])) print '<input type="text" class="flat maxwidth75" name="search_'.$key.'" value="'.dol_escape_htmltag($search[$key]).'">';
+		} elseif (!preg_match('/^(date|timestamp|datetime)/', $val['type'])) {
+			print '<input type="text" class="flat maxwidth75" name="search_'.$key.'" value="'.dol_escape_htmltag($search[$key]).'">';
+		} elseif (preg_match('/^(date|timestamp|datetime)/', $val['type'])) {
+			print '<div class="nowrap">';
+			print $form->selectDate($search[$key.'_start'] ? $search[$key.'_start'] : -1, "search_".$key."_start", 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '', $langs->trans('From'));
+			print '</div>';
+			print '<div class="nowrap">';
+			print $form->selectDate($search[$key.'_end'] ? $search[$key.'_end'] : -1, "search_".$key."_end", 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '', $langs->trans('to'));
+			print '</div>';
+		}
 		print '</td>';
 	}
 }
@@ -534,13 +587,10 @@ while ($i < ($limit ? min($num, $limit) : $num))
 		{
 			print '<td'.($cssforfield ? ' class="'.$cssforfield.'"' : '').'>';
 			if ($key == 'status') print $object->getLibStatut(5);
-
-
-			elseif ($key == 'fk_soc') {
+			elseif ($key == 'fk_soc' && $permissiontoadd) {
 				#Spécial case of fk_soc to affect if
-				print $object->showInputField($val, $key.'', $object->$key, '', '_'.$object->id, '', 0, 1);
+				print $object->showInputField($val, $key.'', $object->$key, '', '_'.$object->id, 'affect_', '', 1);
 			}
-
 			else print $object->showOutputField($val, $key, $object->$key, '');
 			print '</td>';
 			if (!$i) $totalarray['nbfield']++;
