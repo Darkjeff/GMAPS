@@ -366,6 +366,26 @@ class modGmaps extends DolibarrModules
             // 0=Menu for internal users, 1=external users, 2=both
             'user'=>2
         );
+		$this->menu[$r++]=array(
+			// '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+			'fk_menu'=>'fk_mainmenu=gmaps',
+			// This is a Left menu entry
+			'type'=>'left',
+			'titre'=>'Alayse KM',
+			'mainmenu'=>'gmaps',
+			'leftmenu'=>'gmaps_gmaps_activity',
+			'url'=>'/gmaps/gmaps_analyses_km.php',
+			// Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+			'langs'=>'gmaps@gmaps',
+			'position'=>1101+$r,
+			// Define condition to show or hide menu entry. Use '$conf->gmaps->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+			'enabled'=>'$conf->gmaps->enabled',
+			// Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
+			'perms'=>'1',
+			'target'=>'',
+			// 0=Menu for internal users, 1=external users, 2=both
+			'user'=>2
+		);
 
 		/* END MODULEBUILDER LEFTMENU GMAPS_ACTIVITY */
 		// Exports profiles provided by this module
@@ -436,9 +456,10 @@ class modGmaps extends DolibarrModules
 		if ($result < 0) return -1; // Do not activate module if error 'not allowed' returned when loading module SQL queries (the _load_table run sql with run_sql with the error allowed parameter set to 'default')
 
 		// Create extrafields during init
-		//include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
-		//$extrafields = new ExtraFields($this->db);
-		//$result1=$extrafields->addExtraField('gmaps_myattr1', "New Attr 1 label", 'boolean', 1,  3, 'thirdparty',   0, 0, '', '', 1, '', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
+		include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
+		$extrafields = new ExtraFields($this->db);
+		$param['options']['gmaps_gmaps_place:CONCAT(location_name,\' \',location_address_raw):rowid::']=null;
+		$result1=$extrafields->addExtraField('fk_gmaps_gmaps_place', "Lieu Gmaps", 'chkbxlst', 1,  '', 'thirdparty',   0, 0, '', $param, 1, '', 1, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
 		//$result2=$extrafields->addExtraField('gmaps_myattr2', "New Attr 2 label", 'varchar', 1, 10, 'project',      0, 0, '', '', 1, '', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
 		//$result3=$extrafields->addExtraField('gmaps_myattr3', "New Attr 3 label", 'varchar', 1, 10, 'bank_account', 0, 0, '', '', 1, '', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
 		//$result4=$extrafields->addExtraField('gmaps_myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1,'', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');

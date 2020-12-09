@@ -144,7 +144,17 @@ foreach ($object->fields as $key => $val)
 		);
 	}
 }
+
+if (GETPOSTISSET('selectedfields') && preg_match('/places/s',GETPOST('selectedfields','alpha'))) {
+	$visible_places=1;
+} else {
+	$visible_places=0;
+}
+$arrayfields['places'] = array('label'=>$langs->trans('Places'),
+			'checked'=>$visible_places,
+			'enabled'=>1,'position'=>999);
 // Extra fields
+
 if (is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label']) > 0)
 {
 	foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $val)
@@ -242,6 +252,7 @@ if (empty($reshook))
 		} else {
 			setEventMessage('Please select at leat One row','errors');
 		}
+		$toselect=array();
 	}
 	if ($massaction=='set_status_canceled' && $permissiontoadd) {
 		if (!empty($toselect)) {
@@ -261,6 +272,7 @@ if (empty($reshook))
 		} else {
 			setEventMessage('Please select at leat One row','errors');
 		}
+		$toselect=array();
 	}
 }
 
@@ -284,7 +296,7 @@ $title = $langs->trans('ListOf', $langs->transnoentitiesnoconv("Gmaps_activitys"
 $sql = 'SELECT ';
 foreach ($object->fields as $key => $val)
 {
-	$sql .= 't.'.$key.', ';
+		$sql .= 't.'.$key.', ';
 }
 // Add fields from extrafields
 if (!empty($extrafields->attributes[$object->table_element]['label'])) {
@@ -523,6 +535,9 @@ foreach ($object->fields as $key => $val)
 		print '</td>';
 	}
 }
+if (!empty($arrayfields['places']['checked'])) {
+	print '<td class="liste_titre"></td>';
+}
 // Extra fields
 include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_search_input.tpl.php';
 
@@ -552,6 +567,9 @@ foreach ($object->fields as $key => $val)
 	{
 		print getTitleFieldOfList($arrayfields['t.'.$key]['label'], 0, $_SERVER['PHP_SELF'], 't.'.$key, '', $param, ($cssforfield ? 'class="'.$cssforfield.'"' : ''), $sortfield, $sortorder, ($cssforfield ? $cssforfield.' ' : ''))."\n";
 	}
+}
+if (!empty($arrayfields['places']['checked'])) {
+	print getTitleFieldOfList($arrayfields['places']['label'], 0, $_SERVER['PHP_SELF'], '', '', '', ($cssforfield ? 'class="'.$cssforfield.'"' : ''), $sortfield, $sortorder, ($cssforfield ? $cssforfield.' ' : ''))."\n";;
 }
 // Extra fields
 include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_search_title.tpl.php';
@@ -586,6 +604,7 @@ while ($i < ($limit ? min($num, $limit) : $num))
 
 	// Store properties in $object
 	$object->setVarsFromFetchObj($obj);
+	$object->fetchPlaces();
 
 	// Show here line of result
 	print '<tr class="oddeven">';
@@ -608,7 +627,17 @@ while ($i < ($limit ? min($num, $limit) : $num))
 			if ($key == 'status') print $object->getLibStatut(5);
 			elseif ($key == 'fk_soc' && $permissiontoadd) {
 				#Spécial case of fk_soc to affect if
-				print $object->showInputField($val, $key.'', $object->$key, '', '_'.$object->id, 'affect_', '', 1);
+				if (empty($object->$key)) {
+					$socid=$object->findThirdpartyLinked();
+					if ($socid < 0) {
+						setEventMessage($object->error,$object->errors,'errors');
+					} elseif ($socid > 0){
+						$arrayofselected[] = $object->id;
+					}
+				} else {
+					$socid=$object->$key;
+				}
+				print $object->showInputField($val, $key.'', $socid, '', '_'.$object->id, 'affect_', '', 1);
 			}
 			else print $object->showOutputField($val, $key, $object->$key, '');
 			print '</td>';
@@ -620,6 +649,20 @@ while ($i < ($limit ? min($num, $limit) : $num))
 			}
 		}
 	}
+	if (!empty($arrayfields['places']['checked'])) {
+		print '<td'.($cssforfield ? ' class="'.$cssforfield.'"' : '').'>';
+		print '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">';
+		foreach($object->places as $key=>$place) {
+
+			$txt=$place->location_name.'<BR>'.$place->location_address_raw;
+			print '<li class="select2-search-choice-dolibarr noborderoncategories" style="background: #aaa">'.$txt.'</span></li>';
+
+
+		}
+		print '</ul></div>';
+		print '</td>';
+	}
+
 	// Extra fields
 	include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_print_fields.tpl.php';
 	// Fields from hook

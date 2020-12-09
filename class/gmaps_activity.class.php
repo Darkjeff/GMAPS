@@ -381,6 +381,44 @@ class Gmaps_activity extends CommonObject
 		}
 	}
 
+	public function findThirdpartyLinked() {
+		global $cached_places;
+		if (!isset($cached_places)) {
+			$cached_places=array();
+		}
+		if (is_array($this->places) && count($this->places)>0 && empty($this->fk_soc)) {
+			foreach($this->places as $place) {
+				if (!key_exists($place->id,$cached_places)) {
+					$sql = 'SELECT fk_object FROM ' . MAIN_DB_PREFIX . 'societe_extrafields WHERE ';
+					$sql .= ' ( fk_gmaps_gmaps_place=\'' . $place->id . '\' OR ';
+					$sql .= ' fk_gmaps_gmaps_place LIKE \'' . $place->id . ',%\' OR ';
+					$sql .= ' fk_gmaps_gmaps_place LIKE \'%,' . $place->id . ',%\'';
+					$sql .= ' )';
+					$resql = $this->db->query($sql);
+					if ($resql) {
+						while ($obj = $this->db->fetch_object($resql)) {
+							$soc_id = $obj->fk_object;
+							$cached_places[$place->id] = $soc_id;
+							break;
+						}
+						$this->db->free($resql);
+
+						return $soc_id;
+					} else {
+						$this->errors[] = 'Error ' . $this->db->lasterror();
+						dol_syslog(__METHOD__ . ' ' . join(',', $this->errors), LOG_ERR);
+
+						return -1;
+					}
+				} else {
+					return $cached_places[$place->id];
+				}
+			}
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Load list of objects in memory from the database.
 	 *
