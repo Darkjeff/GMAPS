@@ -139,6 +139,10 @@ class modGmaps extends DolibarrModules
 		//                             2 => array('GMAPS_MYNEWCONST2', 'chaine', 'myvalue', 'This is another constant to add', 0, 'current', 1)
 		// );
 		$this->const = array();
+		$this->const=array(
+			1 => array('GMAPS_COEFF1', 'chaine', '0.29', '0 to 5 000km', 1),
+			2 => array('GMAPS_COEFF2', 'chaine', '0.89', '5 000 to 20 000km', 1),
+			2 => array('GMAPS_TYPETRANSPORTNDF', 'chaine', 'EX_KME', '5 000 to 20 000km', 1));
 
 		// Some keys to add into the overwriting translation tables
 		/*$this->overwrite_translation = array(
@@ -382,6 +386,26 @@ class modGmaps extends DolibarrModules
 			'enabled'=>'$conf->gmaps->enabled',
 			// Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
 			'perms'=>'1',
+			'target'=>'',
+			// 0=Menu for internal users, 1=external users, 2=both
+			'user'=>2
+		);
+		$this->menu[$r++]=array(
+			// '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+			'fk_menu'=>'fk_mainmenu=gmaps',
+			// This is a Left menu entry
+			'type'=>'left',
+			'titre'=>'GmapsPrepareNDF',
+			'mainmenu'=>'gmaps',
+			'leftmenu'=>'gmaps_gmaps_activity',
+			'url'=>'/gmaps/gmaps_prepare_ndf.php',
+			// Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+			'langs'=>'gmaps@gmaps',
+			'position'=>1101+$r,
+			// Define condition to show or hide menu entry. Use '$conf->gmaps->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+			'enabled'=>'$conf->gmaps->enabled',
+			// Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
+			'perms'=>'$user->rights->expensereport->creer',
 			'target'=>'',
 			// 0=Menu for internal users, 1=external users, 2=both
 			'user'=>2

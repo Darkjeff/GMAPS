@@ -56,8 +56,9 @@ $backtopage = GETPOST('backtopage', 'alpha');
 $value = GETPOST('value', 'alpha');
 
 $arrayofparameters = array(
-	'GMAPS_MYPARAM1'=>array('css'=>'minwidth200', 'enabled'=>1),
-	'GMAPS_MYPARAM2'=>array('css'=>'minwidth500', 'enabled'=>1)
+	'GMAPS_COEFF1'=>array('css'=>'minwidth200', 'enabled'=>1),
+	'GMAPS_COEFF2'=>array('css'=>'minwidth500', 'enabled'=>1),
+	'GMAPS_TYPETRANSPORTNDF'=>array('css'=>'minwidth500', 'enabled'=>1)
 );
 
 $error = 0;
