@@ -145,21 +145,38 @@ $sql .= " GROUP BY ga.fk_soc";
 $resql = $db->query($sql);
 if ($resql) {
 	$num = $db->num_rows($resql);
-
+	$total_known=array();
+	$grand_total_known=0;
 	while ($row = $db->fetch_row($resql)) {
 
 		print '<tr class="oddeven"><td>';
 		if ($row[0] == 'tobind')
 		{
 			print $langs->trans("Unknown");
-		} else	print $row[1];
+		} else print $row[1];
 		print '</td>';
 
 		for ($i = 2; $i <= 13; $i++) {
 			print '<td class="nowrap right">'.round($row[$i]/1000).'</td>';
+			if ($row[0] != 'tobind')
+			{
+				$total_known[$i]+=round($row[$i]/1000);
+			}
+		}
+		if ($row[0] != 'tobind')
+		{
+			$grand_total_known+=round($row[14]/1000);
 		}
 
 		print '<td class="nowrap right"><b>'.round($row[14]/1000).'</b></td>';
+		print '</tr>';
+	}
+	if ($num>0) {
+		print '<tr class="liste_total"><td class="left">Total</td>';
+		for ($i = 2; $i <= 13; $i++) {
+			print '<td class="nowrap right">'.$total_known[$i]	.'</td>';
+		}
+		print '<td class="nowrap right"><b>'.$grand_total_known.'</b></td>';
 		print '</tr>';
 	}
 	$db->free($resql);
