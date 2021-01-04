@@ -161,14 +161,15 @@ print '<script type="text/javascript" language="javascript">
 print '</form>';
 
 $sql = "SELECT ";
-$sql .= 'ga.fk_soc AS fk_soc , s.nom as name, ga.duration_start, ga.distance';
+$sql .= 'ga.fk_soc AS fk_soc , s.nom as name, DATE(ga.duration_start) as duration_start, SUM(ga.distance) as distance';
 $sql .= " FROM " . MAIN_DB_PREFIX . $object->table_element . " as ga";
 $sql .= "  INNER JOIN " . MAIN_DB_PREFIX . "societe as s ON s.rowid = ga.fk_soc";
 $sql .= " WHERE ga.duration_start >= '" . $db->idate($date_start) . "'";
 $sql .= "  AND ga.duration_start <= '" . $db->idate($date_end) . "'";
 //$sql .= " AND ga.entity IN (".getEntity('gmaps_activity', 0).")"; // We don't share object for accountancy
 $sql .= " AND ga.status =" . Gmaps_activity::STATUS_VALIDATED;
-$sql .= " ORDER BY s.nom, ga.duration_start";
+$sql .= " GROUP BY s.nom, DATE(ga.duration_start)";
+$sql .= " ORDER BY s.nom, DATE(ga.duration_start)";
 
 if ($action == 'refresh' && !empty($date_start) && !empty($date_end)) {
 	print '<div class="div-table-responsive-no-min">';
