@@ -48,6 +48,12 @@ MyWidget = Mon widget
 MyWidgetDescription = Description de mon widget
 
 
+#
+# Page
+#
+Gmaps_activity = Liste des déplacement
+Gmaps_activitys = Liste des déplacement
+
 #Field
 LatitudeStart = Latitude départ
 LongitudeEnd = Longitude arrivé
