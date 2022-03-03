@@ -47,12 +47,20 @@ MyPageName = Nom de ma page
 MyWidget = Mon widget
 MyWidgetDescription = Description de mon widget
 
+#
+# Menu
+#
+New_Gmaps_activity = Nouveau déplacement
+List_Gmaps_activity = Liste des déplacement
+Alayse_KM=Analyse KM
+GmapsPrepareNDF= Générer les note de frais
 
 #
 # Page
 #
-Gmaps_activity = Liste des déplacement
 Gmaps_activitys = Liste des déplacement
+
+
 
 #Field
 LatitudeStart = Latitude départ

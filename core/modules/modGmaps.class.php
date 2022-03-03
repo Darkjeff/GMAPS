@@ -45,7 +45,7 @@ class modGmaps extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = 500000; // TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve an id number for your module
+		$this->numero = 103200; // TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve an id number for your module
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'gmaps';
 		// Family can be 'base' (core modules),'crm','financial','hr','projects','products','ecm','technic' (transverse modules),'interface' (link with external tools),'other','...'
@@ -335,7 +335,7 @@ class modGmaps extends DolibarrModules
             'fk_menu'=>'fk_mainmenu=gmaps',
             // This is a Left menu entry
             'type'=>'left',
-            'titre'=>'List Gmaps_activity',
+            'titre'=>'List_Gmaps_activity',
             'mainmenu'=>'gmaps',
             'leftmenu'=>'gmaps_gmaps_activity',
             'url'=>'/gmaps/gmaps_activity_list.php',
@@ -355,7 +355,7 @@ class modGmaps extends DolibarrModules
             'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmaps_gmaps_activity',
             // This is a Left menu entry
             'type'=>'left',
-            'titre'=>'New Gmaps_activity',
+            'titre'=>'New_Gmaps_activity',
             'mainmenu'=>'gmaps',
             'leftmenu'=>'gmaps_gmaps_activity',
             'url'=>'/gmaps/gmaps_activity_card.php?action=create',
@@ -375,7 +375,7 @@ class modGmaps extends DolibarrModules
 			'fk_menu'=>'fk_mainmenu=gmaps',
 			// This is a Left menu entry
 			'type'=>'left',
-			'titre'=>'Alayse KM',
+			'titre'=>'Alayse_KM',
 			'mainmenu'=>'gmaps',
 			'leftmenu'=>'gmaps_gmaps_activity',
 			'url'=>'/gmaps/gmaps_analyses_km.php',
