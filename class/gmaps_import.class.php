@@ -975,6 +975,7 @@ class Gmaps_import extends CommonObject
 
 	public function importFile($file, $user)
 	{
+		require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 		global $conf, $langs;
 
 		$error = 0;
@@ -1010,8 +1011,12 @@ class Gmaps_import extends CommonObject
 								$gmapsActivity->location_start_lat = $activitySegment->startLocation->latitudeE7;
 								$gmapsActivity->location_end_long = $activitySegment->endLocation->longitudeE7;
 								$gmapsActivity->location_end_lat = $activitySegment->endLocation->latitudeE7;
-								$gmapsActivity->duration_start = round(((int) $activitySegment->duration->startTimestampMs)*0.001);
-								$gmapsActivity->duration_end = round(((int) $activitySegment->duration->endTimestampMs)*0.001);
+								//$dateWork = DateTime::createFromFormat('Y-m-d\TH:i:s\Z');
+								//$dateWork = dol_stringtotime($activitySegment->duration->startTimestamp);
+								//$gmapsActivity->duration_start = round(((int) $activitySegment->duration->startTimestamp)*0.001);
+								$gmapsActivity->duration_start = dol_stringtotime($activitySegment->duration->startTimestamp);
+								//$gmapsActivity->duration_end = round(((int) $activitySegment->duration->endTimestamp)*0.001);
+								$gmapsActivity->duration_end = dol_stringtotime($activitySegment->duration->endTimestamp);
 								$gmapsActivity->distance = $activitySegment->distance;
 								$gmapsActivity->status = Gmaps_activity::STATUS_VALIDATED;
 
@@ -1041,8 +1046,10 @@ class Gmaps_import extends CommonObject
 								$gmapsPlaceVisit->location_placeid = $placeVisit->location->placeId;
 								$gmapsPlaceVisit->location_address_raw = $placeVisit->location->address;
 								$gmapsPlaceVisit->location_name = $placeVisit->location->name;
-								$gmapsPlaceVisit->duration_start = round((int) $placeVisit->duration->startTimestampMs)*0.001;
-								$gmapsPlaceVisit->duration_end = round ((int) $placeVisit->duration->endTimestampMs)*0.001;
+								//$gmapsPlaceVisit->duration_start = round((int) $placeVisit->duration->startTimestampMs)*0.001;
+								$gmapsPlaceVisit->duration_start = dol_stringtotime($placeVisit->duration->startTimestamp);
+								//$gmapsPlaceVisit->duration_end = round ((int) $placeVisit->duration->endTimestampMs)*0.001;
+								$gmapsPlaceVisit->duration_end = dol_stringtotime($placeVisit->duration->startTimestamp);
 								$gmapsPlaceVisit->status = Gmaps_place::STATUS_VALIDATED;
 
 								$result = $gmapsPlaceVisit->create($user);

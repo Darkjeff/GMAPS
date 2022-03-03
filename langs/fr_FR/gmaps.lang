@@ -46,3 +46,12 @@ MyPageName = Nom de ma page
 #
 MyWidget = Mon widget
 MyWidgetDescription = Description de mon widget
+
+
+#Field
+LatitudeStart = Latitude départ
+LongitudeEnd = Longitude arrivé
+LatitudeEnd = Latitude arrivé
+LongitudeStart = Longitude départ
+DurationStart = Heure de début
+DurationEnd = Heure de fin
