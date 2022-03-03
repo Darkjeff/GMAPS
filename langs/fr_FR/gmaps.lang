@@ -62,6 +62,7 @@ List_Gmaps_import=Import fichier Gmaps
 #
 Gmaps_activitys = Liste des déplacement
 GmapsAreaKM = Analyse KM
+GmapsAreaTemps = Analyse Temps (min.)
 GmapsArea = Traitement fichier GMaps
 
 

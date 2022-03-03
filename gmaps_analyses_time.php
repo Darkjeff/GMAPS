@@ -19,7 +19,7 @@
  */
 
 /**
- *    \file       gmaps/gmapsindex.php
+ *    \file       gmaps/gmaps_analyses_time.php
  *    \ingroup    gmaps
  *    \brief      Home page of gmaps top menu
  */
@@ -50,7 +50,7 @@ require_once __DIR__.'/class/gmaps_activity.class.php';
 $object = new Gmaps_activity($db);
 
 // Load translation files required by the page
-$langs->loadLangs(array('companies',"gmaps@gmaps"));
+$langs->loadLangs(array("companies","gmaps@gmaps"));
 
 $action = GETPOST('action', 'aZ09');
 $confirm = GETPOST('confirm', 'alpha');
@@ -105,14 +105,14 @@ $year_current = $year_start;
  * View
  */
 
-llxHeader("", $langs->trans("GmapsArea"));
+llxHeader("", $langs->trans("GmapsAreaTemps"));
 
 $textprevyear = '<a href="'.$_SERVER["PHP_SELF"].'?year='.($year_current - 1).'">'.img_previous().'</a>';
 $textnextyear = '&nbsp;<a href="'.$_SERVER["PHP_SELF"].'?year='.($year_current + 1).'">'.img_next().'</a>';
 
-print load_fiche_titre($langs->trans("GmapsAreaKM")." ".$textprevyear." ".$langs->trans("Year")." ".$year_start." ".$textnextyear, '', 'title_accountancy');
+print load_fiche_titre($langs->trans("GmapsAreaTemps")." ".$textprevyear." ".$langs->trans("Year")." ".$year_start." ".$textnextyear, '', 'title_accountancy');
 
-print_barre_liste($langs->trans("GmapsAreaKM"), '', '', '', '', '', '', -1, '', '', 0, '', '', 0, 1, 1);
+print_barre_liste($langs->trans("GmapsAreaTemps"), '', '', '', '', '', '', -1, '', '', 0, '', '', 0, 1, 1);
 //print load_fiche_titre($langs->trans("OverviewOfAmountOfLinesBound"), '', '');
 
 print '<div class="div-table-responsive-no-min">';
@@ -130,9 +130,9 @@ $sql .=$db->ifsql('ga.fk_soc IS NULL', "'tobind'", 'ga.fk_soc'). ' AS fk_soc , s
 for ($i = 1; $i <= 12; $i++) {
 	$j = $i + ($conf->global->SOCIETE_FISCAL_MONTH_START ? $conf->global->SOCIETE_FISCAL_MONTH_START : 1) - 1;
 	if ($j > 12) $j -= 12;
-	$sql .= "  SUM(".$db->ifsql('MONTH(ga.duration_start)='.$j, 'ga.distance', '0').") AS month".str_pad($j, 2, '0', STR_PAD_LEFT).",";
+	$sql .= "  SUM(".$db->ifsql('MONTH(ga.duration_start)='.$j, 'ga.duration_end-ga.duration_start', '0').") AS month".str_pad($j, 2, '0', STR_PAD_LEFT).",";
 }
-$sql .= "  SUM(ga.distance) as total";
+$sql .= "  SUM(ga.duration_end-ga.duration_start) as difftime";
 $sql .= " FROM ".MAIN_DB_PREFIX.$object->table_element." as ga";
 $sql .= "  LEFT JOIN ".MAIN_DB_PREFIX."societe as s ON s.rowid = ga.fk_soc";
 $sql .= " WHERE ga.duration_start >= '".$db->idate($search_date_start)."'";
