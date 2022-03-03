@@ -64,7 +64,7 @@ Gmaps_activitys = Liste des déplacement
 GmapsAreaKM = Analyse KM
 GmapsAreaTemps = Analyse Temps (min.)
 GmapsArea = Traitement fichier GMaps
-
+CreateNDF = Créer les note de frais
 
 #Field
 LatitudeStart = Latitude départ
@@ -73,3 +73,5 @@ LatitudeEnd = Latitude arrivé
 LongitudeStart = Longitude départ
 DurationStart = Heure de début
 DurationEnd = Heure de fin
+
+

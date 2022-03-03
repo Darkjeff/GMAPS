@@ -130,9 +130,9 @@ $sql .=$db->ifsql('ga.fk_soc IS NULL', "'tobind'", 'ga.fk_soc'). ' AS fk_soc , s
 for ($i = 1; $i <= 12; $i++) {
 	$j = $i + ($conf->global->SOCIETE_FISCAL_MONTH_START ? $conf->global->SOCIETE_FISCAL_MONTH_START : 1) - 1;
 	if ($j > 12) $j -= 12;
-	$sql .= "  SUM(".$db->ifsql('MONTH(ga.duration_start)='.$j, 'ga.duration_end-ga.duration_start', '0').") AS month".str_pad($j, 2, '0', STR_PAD_LEFT).",";
+	$sql .= "  SUM(".$db->ifsql('MONTH(ga.duration_start)='.$j, 'TIMESTAMPDIFF(MINUTE,ga.duration_start,ga.duration_end)', '0').") AS month".str_pad($j, 2, '0', STR_PAD_LEFT).",";
 }
-$sql .= "  SUM(ga.duration_end-ga.duration_start) as difftime";
+$sql .= "  SUM(TIMESTAMPDIFF(MINUTE,ga.duration_start,ga.duration_end)) as difftime";
 $sql .= " FROM ".MAIN_DB_PREFIX.$object->table_element." as ga";
 $sql .= "  LEFT JOIN ".MAIN_DB_PREFIX."societe as s ON s.rowid = ga.fk_soc";
 $sql .= " WHERE ga.duration_start >= '".$db->idate($search_date_start)."'";
@@ -140,7 +140,6 @@ $sql .= "  AND ga.duration_start <= '".$db->idate($search_date_end)."'";
 //$sql .= " AND ga.entity IN (".getEntity('gmaps_activity', 0).")"; // We don't share object for accountancy
 $sql .= " AND ga.status =".Gmaps_activity::STATUS_VALIDATED;
 $sql .= " GROUP BY ga.fk_soc";
-
 
 $resql = $db->query($sql);
 if ($resql) {
@@ -157,18 +156,18 @@ if ($resql) {
 		print '</td>';
 
 		for ($i = 2; $i <= 13; $i++) {
-			print '<td class="nowrap right">'.round($row[$i]/1000).'</td>';
+			print '<td class="nowrap right">'.$row[$i].'</td>';
 			if ($row[0] != 'tobind')
 			{
-				$total_known[$i]+=round($row[$i]/1000);
+				$total_known[$i]+=$row[$i];
 			}
 		}
 		if ($row[0] != 'tobind')
 		{
-			$grand_total_known+=round($row[14]/1000);
+			$grand_total_known+=$row[14];
 		}
 
-		print '<td class="nowrap right"><b>'.round($row[14]/1000).'</b></td>';
+		print '<td class="nowrap right"><b>'.$row[14].'</b></td>';
 		print '</tr>';
 	}
 	if ($num>0) {
