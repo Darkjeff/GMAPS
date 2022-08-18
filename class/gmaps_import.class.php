@@ -1038,14 +1038,13 @@ class Gmaps_import extends CommonObject
 							if (property_exists($placeVisit, 'location')
 								&& property_exists($placeVisit->location, 'placeId')
 								&& property_exists($placeVisit->location, 'address')
-								&& property_exists($placeVisit->location, 'name')
 								&& property_exists($placeVisit, 'duration')) {
 								$gmapsPlaceVisit = new Gmaps_place($this->db);
 								$gmapsPlaceVisit->ref = $key;
 								$gmapsPlaceVisit->fk_gmaps_activity = $gmapsActivity->id;
 								$gmapsPlaceVisit->location_placeid = $placeVisit->location->placeId;
 								$gmapsPlaceVisit->location_address_raw = $placeVisit->location->address;
-								$gmapsPlaceVisit->location_name = $placeVisit->location->name;
+								$gmapsPlaceVisit->location_name = (property_exists($placeVisit->location, 'name')?$placeVisit->location->name:$placeVisit->location->address);
 								//$gmapsPlaceVisit->duration_start = round((int) $placeVisit->duration->startTimestampMs)*0.001;
 								$gmapsPlaceVisit->duration_start = dol_stringtotime($placeVisit->duration->startTimestamp);
 								//$gmapsPlaceVisit->duration_end = round ((int) $placeVisit->duration->endTimestampMs)*0.001;
