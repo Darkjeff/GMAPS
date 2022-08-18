@@ -242,6 +242,9 @@ if (empty($reshook))
 					setEventMessages($act->error,$act->errors,'errors');
 				} elseif($result > 0) {
 					$act->fk_soc=GETPOST('affect_fk_soc_'.$val);
+					if ($act->fk_soc==-1) {
+						unset($act->fk_soc);
+					}
 					$result_Upd=$act->update($user);
 					if ($result_Upd < 0) {
 						setEventMessages($act->error,$act->errors,'errors');
