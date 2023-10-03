@@ -63,8 +63,8 @@ if (empty($page) || $page == -1) { $page = 0; }     // If $page is not defined, 
 $offset = $limit * $page;
 $pageprev = $page - 1;
 $pagenext = $page + 1;
-if (!$sortorder) $sortorder = "ASC";
-if (!$sortfield) $sortfield = "position_name";
+if (!$sortorder) $sortorder = "DESC";
+if (!$sortfield) $sortfield = "date";
 
 $upload_dir = $conf->gmaps->multidir_output[$conf->entity];
 

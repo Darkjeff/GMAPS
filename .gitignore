@@ -7,7 +7,7 @@
 /vendor
 /dev/bin
 # PHPdocumentor generated files
-/build/phpdoc
+/build/*
 /doc/code/phpdoc
 # Sphinx generated files
 /doc/user/build
