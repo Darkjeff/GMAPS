@@ -17,20 +17,20 @@
  */
 
 /**
- * \file        class/gmaps_import.class.php
+ * \file        class/gmapsimport.class.php
  * \ingroup     gmaps
  * \brief       This file is a CRUD class file for Gmaps_import (Create/Read/Update/Delete)
  */
 
 // Put here all includes required by your class file
 require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
-dol_include_once('/gmaps/class/gmaps_activity.class.php');
-dol_include_once('/gmaps/class/gmaps_place.class.php');
+dol_include_once('/gmaps/class/gmapsactivity.class.php');
+dol_include_once('/gmaps/class/gmapsplace.class.php');
 
 /**
  * Class for Gmaps_import
  */
-class Gmaps_import extends CommonObject
+class GmapsImport extends CommonObject
 {
 	/**
 	 * @var string ID of module.
@@ -40,12 +40,12 @@ class Gmaps_import extends CommonObject
 	/**
 	 * @var string ID to identify managed object.
 	 */
-	public $element = 'gmaps_import';
+	public $element = 'gmapsImport';
 
 	/**
 	 * @var string Name of table without prefix where object is stored. This is also the key used for extrafields management.
 	 */
-	public $table_element = 'gmaps_gmaps_import';
+	public $table_element = 'gmaps_gmapsimport';
 
 	/**
 	 * @var int  Does this object support multicompany module ?
@@ -836,7 +836,7 @@ class Gmaps_import extends CommonObject
 	{
 		$this->lines = array();
 
-		$objectline = new Gmaps_importLine($this->db);
+		$objectline = new gmapsImportLine($this->db);
 		$result = $objectline->fetchAll('ASC', 'position', 0, 0, array('customsql' => 'fk_gmaps_import = ' . $this->id));
 
 		if (is_numeric($result)) {
@@ -1005,7 +1005,7 @@ class Gmaps_import extends CommonObject
 								&& property_exists($activitySegment, 'endLocation')
 								&& property_exists($activitySegment, 'duration')
 								&& property_exists($activitySegment, 'distance')) {
-								$gmapsActivity = new Gmaps_activity($this->db);
+								$gmapsActivity = new GmapsActivity($this->db);
 								$gmapsActivity->ref = $key;
 								$gmapsActivity->location_start_long = $activitySegment->startLocation->longitudeE7;
 								$gmapsActivity->location_start_lat = $activitySegment->startLocation->latitudeE7;
@@ -1018,7 +1018,7 @@ class Gmaps_import extends CommonObject
 								//$gmapsActivity->duration_end = round(((int) $activitySegment->duration->endTimestamp)*0.001);
 								$gmapsActivity->duration_end = dol_stringtotime($activitySegment->duration->endTimestamp);
 								$gmapsActivity->distance = $activitySegment->distance;
-								$gmapsActivity->status = Gmaps_activity::STATUS_VALIDATED;
+								$gmapsActivity->status = GmapsActivity::STATUS_VALIDATED;
 
 								$result = $gmapsActivity->create($user);
 								if ($result < 0) {
@@ -1039,9 +1039,9 @@ class Gmaps_import extends CommonObject
 								&& property_exists($placeVisit->location, 'placeId')
 								&& property_exists($placeVisit->location, 'address')
 								&& property_exists($placeVisit, 'duration')) {
-								$gmapsPlaceVisit = new Gmaps_place($this->db);
+								$gmapsPlaceVisit = new GmapsPlace($this->db);
 								$gmapsPlaceVisit->ref = $key;
-								$gmapsPlaceVisit->fk_gmaps_activity = $gmapsActivity->id;
+								$gmapsPlaceVisit->fk_gmapsactivity = $gmapsActivity->id;
 								$gmapsPlaceVisit->location_placeid = $placeVisit->location->placeId;
 								$gmapsPlaceVisit->location_address_raw = $placeVisit->location->address;
 								$gmapsPlaceVisit->location_name = (property_exists($placeVisit->location, 'name')?$placeVisit->location->name:$placeVisit->location->address);
@@ -1049,7 +1049,7 @@ class Gmaps_import extends CommonObject
 								$gmapsPlaceVisit->duration_start = dol_stringtotime($placeVisit->duration->startTimestamp);
 								//$gmapsPlaceVisit->duration_end = round ((int) $placeVisit->duration->endTimestampMs)*0.001;
 								$gmapsPlaceVisit->duration_end = dol_stringtotime($placeVisit->duration->startTimestamp);
-								$gmapsPlaceVisit->status = Gmaps_place::STATUS_VALIDATED;
+								$gmapsPlaceVisit->status = GmapsPlace::STATUS_VALIDATED;
 
 								$result = $gmapsPlaceVisit->create($user);
 								if ($result < 0) {

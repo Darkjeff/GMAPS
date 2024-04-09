@@ -46,8 +46,8 @@ if (!$res && file_exists("../../../main.inc.php")) $res = @include "../../../mai
 if (!$res) die("Include of main fails");
 
 require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once __DIR__.'/class/gmaps_activity.class.php';
-$object = new Gmaps_activity($db);
+require_once __DIR__.'/class/gmapsactivity.class.php';
+$object = new GmapsActivity($db);
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies',"gmaps@gmaps"));
@@ -137,8 +137,8 @@ $sql .= " FROM ".MAIN_DB_PREFIX.$object->table_element." as ga";
 $sql .= "  LEFT JOIN ".MAIN_DB_PREFIX."societe as s ON s.rowid = ga.fk_soc";
 $sql .= " WHERE ga.duration_start >= '".$db->idate($search_date_start)."'";
 $sql .= "  AND ga.duration_start <= '".$db->idate($search_date_end)."'";
-//$sql .= " AND ga.entity IN (".getEntity('gmaps_activity', 0).")"; // We don't share object for accountancy
-$sql .= " AND ga.status =".Gmaps_activity::STATUS_VALIDATED;
+//$sql .= " AND ga.entity IN (".getEntity('gmapsActivity', 0).")"; // We don't share object for accountancy
+$sql .= " AND ga.status =".GmapsActivity::STATUS_VALIDATED;
 $sql .= " GROUP BY ga.fk_soc";
 
 

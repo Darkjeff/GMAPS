@@ -14,26 +14,12 @@
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 
 
-CREATE TABLE llx_gmaps_gmaps_place(
-	-- BEGIN MODULEBUILDER FIELDS
-	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-	ref varchar(128), 
-	fk_soc integer, 
-	fk_project integer, 
-	description text, 
-	note_public text, 
-	note_private text, 
-	date_creation datetime NOT NULL, 
-	tms timestamp, 
-	fk_user_creat integer NOT NULL, 
-	fk_user_modif integer, 
-	import_key varchar(14), 
-	status smallint NOT NULL, 
-	fk_gmaps_activity integer NOT NULL, 
-	location_placeid varchar(50), 
-	location_address_raw varchar(200), 
-	location_name varchar(200), 
-	duration_start datetime, 
-	duration_end datetime
-	-- END MODULEBUILDER FIELDS
-) ENGINE=innodb;
+-- BEGIN MODULEBUILDER INDEXES
+ALTER TABLE llx_gmaps_gmapsplace ADD INDEX idx_gmaps_gmapsplace_rowid (rowid);
+ALTER TABLE llx_gmaps_gmapsplace ADD INDEX idx_gmaps_gmapsplace_ref (ref);
+ALTER TABLE llx_gmaps_gmapsplace ADD INDEX idx_gmaps_gmapsplace_fk_soc (fk_soc);
+ALTER TABLE llx_gmaps_gmapsplace ADD INDEX idx_gmaps_gmapsplace_fk_project (fk_project);
+ALTER TABLE llx_gmaps_gmapsplace ADD CONSTRAINT llx_gmaps_gmapsplace_fk_user_creat FOREIGN KEY (fk_user_creat) REFERENCES llx_user(rowid);
+ALTER TABLE llx_gmaps_gmapsplace ADD INDEX idx_gmaps_gmapsplace_status (status);
+ALTER TABLE llx_gmaps_gmapsplace ADD INDEX idx_gmaps_gmapsplace_fk_gmapsActivity (fk_gmapsactivity);
+-- END MODULEBUILDER INDEXES

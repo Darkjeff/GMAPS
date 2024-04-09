@@ -62,7 +62,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/images.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
-dol_include_once('/gmaps/class/gmaps_import.class.php');
+dol_include_once('/gmaps/class/gmapsimport.class.php');
 dol_include_once('/gmaps/lib/gmaps_gmaps_import.lib.php');
 
 // Load translation files required by the page
@@ -88,7 +88,7 @@ if (!$sortfield) $sortfield = "name";
 //if (! $sortfield) $sortfield="position_name";
 
 // Initialize technical objects
-$object = new Gmaps_import($db);
+$object = new gmapsImport($db);
 $extrafields = new ExtraFields($db);
 $diroutputmassaction = $conf->gmaps->dir_output.'/temp/massgeneration/'.$user->id;
 $hookmanager->initHooks(array('gmaps_importdocument', 'globalcard')); // Note that conf->hooks_modules contains array

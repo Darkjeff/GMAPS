@@ -63,7 +63,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 
 // load gmaps libraries
-require_once __DIR__.'/class/gmaps_import.class.php';
+require_once __DIR__.'/class/gmapsimport.class.php';
 
 // for other modules
 //dol_include_once('/othermodule/class/otherobject.class.php');
@@ -94,7 +94,7 @@ $pageprev = $page - 1;
 $pagenext = $page + 1;
 
 // Initialize technical objects
-$object = new Gmaps_import($db);
+$object = new gmapsImport($db);
 $extrafields = new ExtraFields($db);
 $diroutputmassaction = $conf->gmaps->dir_output.'/temp/massgeneration/'.$user->id;
 $hookmanager->initHooks(array('gmaps_importlist')); // Note that conf->hooks_modules contains array
@@ -397,7 +397,7 @@ print_barre_liste($title, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sort
 // Add code for pre mass action (confirmation or email presend form)
 $topicmail = "SendGmaps_importRef";
 $modelmail = "gmaps_import";
-$objecttmp = new Gmaps_import($db);
+$objecttmp = new gmapsImport($db);
 $trackid = 'xxxx'.$object->id;
 include DOL_DOCUMENT_ROOT.'/core/tpl/massactions_pre.tpl.php';
 

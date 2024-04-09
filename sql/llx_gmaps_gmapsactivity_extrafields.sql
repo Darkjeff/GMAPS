@@ -13,7 +13,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program. If not, see https://www.gnu.org/licenses/.
 
-
--- BEGIN MODULEBUILDER INDEXES
-ALTER TABLE llx_gmaps_gmaps_import_extrafields ADD INDEX idx_gmaps_import_fk_object(fk_object);
--- END MODULEBUILDER INDEXES
+create table llx_gmaps_gmapsactivity_extrafields
+(
+  rowid                     integer AUTO_INCREMENT PRIMARY KEY,
+  tms                       timestamp,
+  fk_object                 integer NOT NULL,
+  import_key                varchar(14)                          		-- import key
+) ENGINE=innodb;

@@ -15,5 +15,5 @@
 
 
 -- BEGIN MODULEBUILDER INDEXES
-ALTER TABLE llx_gmaps_gmaps_activity_extrafields ADD INDEX idx_gmaps_activity_fk_object(fk_object);
+ALTER TABLE llx_gmaps_gmapsplace_extrafields ADD INDEX idx_gmapsplace_fk_object(fk_object);
 -- END MODULEBUILDER INDEXES

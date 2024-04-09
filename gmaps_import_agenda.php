@@ -61,7 +61,7 @@ if (!$res) die("Include of main fails");
 require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-dol_include_once('/gmaps/class/gmaps_import.class.php');
+dol_include_once('/gmaps/class/gmapsimport.class.php');
 dol_include_once('/gmaps/lib/gmaps_gmaps_import.lib.php');
 
 
@@ -95,7 +95,7 @@ if (!$sortfield) $sortfield = 'a.datep,a.id';
 if (!$sortorder) $sortorder = 'DESC,DESC';
 
 // Initialize technical objects
-$object = new Gmaps_import($db);
+$object = new gmapsImport($db);
 $extrafields = new ExtraFields($db);
 $diroutputmassaction = $conf->gmaps->dir_output.'/temp/massgeneration/'.$user->id;
 $hookmanager->initHooks(array('gmaps_importagenda', 'globalcard')); // Note that conf->hooks_modules contains array

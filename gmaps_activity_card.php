@@ -19,7 +19,7 @@
 /**
  *   	\file       gmaps_activity_card.php
  *		\ingroup    gmaps
- *		\brief      Page to create/edit/view gmaps_activity
+ *		\brief      Page to create/edit/view gmapsActivity
  */
 
 //if (! defined('NOREQUIREDB'))              define('NOREQUIREDB', '1');				// Do not create database handler $db
@@ -61,9 +61,9 @@ if (!$res) die("Include of main fails");
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formprojet.class.php';
-dol_include_once('/gmaps/class/gmaps_activity.class.php');
-dol_include_once('/gmaps/lib/gmaps_gmaps_activity.lib.php');
-dol_include_once('/gmaps/class/gmaps_gmaps_place.class.php');
+dol_include_once('/gmaps/class/gmapsactivity.class.php');
+dol_include_once('/gmaps/lib/gmaps_gmapsactivity.lib.php');
+dol_include_once('/gmaps/class/gmaps_gmapsplace.class.php');
 
 // Load translation files required by the page
 $langs->loadLangs(array("gmaps@gmaps", "other"));
@@ -74,16 +74,16 @@ $ref        = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
 $confirm    = GETPOST('confirm', 'alpha');
 $cancel     = GETPOST('cancel', 'aZ09');
-$contextpage = GETPOST('contextpage', 'aZ') ?GETPOST('contextpage', 'aZ') : 'gmaps_activitycard'; // To manage different context of search
+$contextpage = GETPOST('contextpage', 'aZ') ?GETPOST('contextpage', 'aZ') : 'gmapsActivitycard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
 //$lineid   = GETPOST('lineid', 'int');
 
 // Initialize technical objects
-$object = new Gmaps_activity($db);
+$object = new GmapsActivity($db);
 $extrafields = new ExtraFields($db);
 $diroutputmassaction = $conf->gmaps->dir_output.'/temp/massgeneration/'.$user->id;
-$hookmanager->initHooks(array('gmaps_activitycard', 'globalcard')); // Note that conf->hooks_modules contains array
+$hookmanager->initHooks(array('gmapsActivitycard', 'globalcard')); // Note that conf->hooks_modules contains array
 
 // Fetch optionals attributes and labels
 $extrafields->fetch_name_optionals_label($object->table_element);
@@ -107,11 +107,11 @@ if (!empty($object->id)) {
 	$object->fetchPlaces();
 }
 
-$permissiontoread = $user->rights->gmaps->gmaps_activity->read;
-$permissiontoadd = $user->rights->gmaps->gmaps_activity->write; // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
-$permissiontodelete = $user->rights->gmaps->gmaps_activity->delete || ($permissiontoadd && isset($object->status) && $object->status == $object::STATUS_DRAFT);
-$permissionnote = $user->rights->gmaps->gmaps_activity->write; // Used by the include of actions_setnotes.inc.php
-$permissiondellink = $user->rights->gmaps->gmaps_activity->write; // Used by the include of actions_dellink.inc.php
+$permissiontoread = $user->rights->gmaps->gmapsActivity->read;
+$permissiontoadd = $user->rights->gmaps->gmapsActivity->write; // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontodelete = $user->rights->gmaps->gmapsActivity->delete || ($permissiontoadd && isset($object->status) && $object->status == $object::STATUS_DRAFT);
+$permissionnote = $user->rights->gmaps->gmapsActivity->write; // Used by the include of actions_setnotes.inc.php
+$permissiondellink = $user->rights->gmaps->gmapsActivity->write; // Used by the include of actions_dellink.inc.php
 $upload_dir = $conf->gmaps->multidir_output[isset($object->entity) ? $object->entity : 1];
 
 // Security check - Protection if external user
@@ -143,7 +143,7 @@ if (empty($reshook))
 			else $backtopage = dol_buildpath('/gmaps/gmaps_activity_card.php', 1).'?id='.($id > 0 ? $id : '__ID__');
 		}
 	}
-	$triggermodname = 'GMAPS_GMAPS_ACTIVITY_MODIFY'; // Name of trigger action code to execute when we modify record
+	$triggermodname = 'GMAPS_GMAPSACTIVITY_MODIFY'; // Name of trigger action code to execute when we modify record
 
 	// Actions cancel, add, update, update_extras, confirm_validate, confirm_delete, confirm_deleteline, confirm_clone, confirm_close, confirm_setdraft, confirm_reopen
 	include DOL_DOCUMENT_ROOT.'/core/actions_addupdatedelete.inc.php';
@@ -170,9 +170,9 @@ if (empty($reshook))
 	}
 
 	// Actions to send emails
-	$triggersendname = 'GMAPS_GMAPS_ACTIVITY_SENTBYMAIL';
-	$autocopy = 'MAIN_MAIL_AUTOCOPY_GMAPS_ACTIVITY_TO';
-	$trackid = 'gmaps_activity'.$object->id;
+	$triggersendname = 'GMAPS_GMAPSACTIVITY_SENTBYMAIL';
+	$autocopy = 'MAIN_MAIL_AUTOCOPY_GMAPSACTIVITY_TO';
+	$trackid = 'gmapsActivity'.$object->id;
 	include DOL_DOCUMENT_ROOT.'/core/actions_sendmails.inc.php';
 }
 
@@ -189,7 +189,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 $formproject = new FormProjets($db);
 
-$title = $langs->trans("Gmaps_activity");
+$title = $langs->trans("GmapsActivity");
 $help_url = '';
 llxHeader('', $title, $help_url);
 
@@ -212,7 +212,7 @@ jQuery(document).ready(function() {
 // Part to create
 if ($action == 'create')
 {
-	print load_fiche_titre($langs->trans("NewObject", $langs->transnoentitiesnoconv("Gmaps_activity")), '', 'object_'.$object->picto);
+	print load_fiche_titre($langs->trans("NewObject", $langs->transnoentitiesnoconv("GmapsActivity")), '', 'object_'.$object->picto);
 
 	print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
 	print '<input type="hidden" name="token" value="'.newToken().'">';
@@ -251,7 +251,7 @@ if ($action == 'create')
 // Part to edit record
 if (($id || $ref) && $action == 'edit')
 {
-	print load_fiche_titre($langs->trans("Gmaps_activity"), '', 'object_'.$object->picto);
+	print load_fiche_titre($langs->trans("GmapsActivity"), '', 'object_'.$object->picto);
 
 	print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
 	print '<input type="hidden" name="token" value="'.newToken().'">';
@@ -286,14 +286,14 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 {
 	$res = $object->fetch_optionals();
 
-	$head = gmaps_activityPrepareHead($object);
-	print dol_get_fiche_head($head, 'card', $langs->trans("Gmaps_activity"), -1, $object->picto);
+	$head = gmapsActivityPrepareHead($object);
+	print dol_get_fiche_head($head, 'card', $langs->trans("GmapsActivity"), -1, $object->picto);
 
 	$formconfirm = '';
 
 	// Confirmation to delete
 	if ($action == 'delete') {
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id, $langs->trans('DeleteGmaps_activity'), $langs->trans('ConfirmDeleteObject'), 'confirm_delete', '', 0, 1);
+		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id, $langs->trans('DeleteGmapsActivity'), $langs->trans('ConfirmDeleteObject'), 'confirm_delete', '', 0, 1);
 	}
 	// Confirmation to delete line
 	if ($action == 'deleteline') {
@@ -491,7 +491,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 			// Clone
 			if ($permissiontoadd) {
-				print '<a class="butAction" href="'.$_SERVER['PHP_SELF'].'?id='.$object->id.'&socid='.$object->socid.'&action=clone&object=gmaps_activity">'.$langs->trans("ToClone").'</a>'."\n";
+				print '<a class="butAction" href="'.$_SERVER['PHP_SELF'].'?id='.$object->id.'&socid='.$object->socid.'&action=clone&object=gmapsActivity">'.$langs->trans("ToClone").'</a>'."\n";
 			}
 
 			/*
@@ -543,13 +543,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 			$relativepath = $objref . '/' . $objref . '.pdf';
 			$filedir = $conf->gmaps->dir_output.'/'.$object->element.'/'.$objref;
 			$urlsource = $_SERVER["PHP_SELF"] . "?id=" . $object->id;
-			$genallowed = $user->rights->gmaps->gmaps_activity->read;	// If you can read, you can build the PDF to read content
-			$delallowed = $user->rights->gmaps->gmaps_activity->write;	// If you can create/edit, you can remove a file on card
-			print $formfile->showdocuments('gmaps:Gmaps_activity', $object->element.'/'.$objref, $filedir, $urlsource, $genallowed, $delallowed, $object->model_pdf, 1, 0, 0, 28, 0, '', '', '', $langs->defaultlang);
+			$genallowed = $user->rights->gmaps->gmapsActivity->read;	// If you can read, you can build the PDF to read content
+			$delallowed = $user->rights->gmaps->gmapsActivity->write;	// If you can create/edit, you can remove a file on card
+			print $formfile->showdocuments('gmaps:GmapsActivity', $object->element.'/'.$objref, $filedir, $urlsource, $genallowed, $delallowed, $object->model_pdf, 1, 0, 0, 28, 0, '', '', '', $langs->defaultlang);
 		}
 
 		// Show links to link elements
-		$linktoelem = $form->showLinkToObjectBlock($object, null, array('gmaps_activity'));
+		$linktoelem = $form->showLinkToObjectBlock($object, null, array('gmapsActivity'));
 		$somethingshown = $form->showLinkedObjectBlock($object, $linktoelem);
 
 
@@ -557,7 +557,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 		$MAXEVENT = 10;
 
-		$morehtmlright = '<a href="'.dol_buildpath('/gmaps/gmaps_activity_agenda.php', 1).'?id='.$object->id.'">';
+		$morehtmlright = '<a href="'.dol_buildpath('/gmaps/gmapsActivity_agenda.php', 1).'?id='.$object->id.'">';
 		$morehtmlright .= $langs->trans("SeeAll");
 		$morehtmlright .= '</a>';
 
@@ -573,10 +573,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	if (GETPOST('modelselected')) $action = 'presend';
 
 	// Presend form
-	$modelmail = 'gmaps_activity';
+	$modelmail = 'gmapsActivity';
 	$defaulttopic = 'InformationMessage';
 	$diroutput = $conf->gmaps->dir_output;
-	$trackid = 'gmaps_activity'.$object->id;
+	$trackid = 'gmapsActivity'.$object->id;
 
 	include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
 }

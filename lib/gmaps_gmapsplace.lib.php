@@ -16,18 +16,18 @@
  */
 
 /**
- * \file    lib/gmaps_gmaps_place.lib.php
+ * \file    lib/gmaps_gmapsPlace.lib.php
  * \ingroup gmaps
- * \brief   Library files with common functions for Gmaps_place
+ * \brief   Library files with common functions for GmapsPlace
  */
 
 /**
- * Prepare array of tabs for Gmaps_place
+ * Prepare array of tabs for GmapsPlace
  *
- * @param	Gmaps_place	$object		Gmaps_place
+ * @param	GmapsPlace	$object		GmapsPlace
  * @return 	array					Array of tabs
  */
-function gmaps_placePrepareHead($object)
+function gmapsPlacePrepareHead($object)
 {
 	global $db, $langs, $conf;
 
@@ -36,7 +36,7 @@ function gmaps_placePrepareHead($object)
 	$h = 0;
 	$head = array();
 
-	$head[$h][0] = dol_buildpath("/gmaps/gmaps_place_card.php", 1).'?id='.$object->id;
+	$head[$h][0] = dol_buildpath("/gmaps/gmapsPlace_card.php", 1).'?id='.$object->id;
 	$head[$h][1] = $langs->trans("Card");
 	$head[$h][2] = 'card';
 	$h++;
@@ -46,7 +46,7 @@ function gmaps_placePrepareHead($object)
 		$nbNote = 0;
 		if (!empty($object->note_private)) $nbNote++;
 		if (!empty($object->note_public)) $nbNote++;
-		$head[$h][0] = dol_buildpath('/gmaps/gmaps_place_note.php', 1).'?id='.$object->id;
+		$head[$h][0] = dol_buildpath('/gmaps/gmapsPlace_note.php', 1).'?id='.$object->id;
 		$head[$h][1] = $langs->trans('Notes');
 		if ($nbNote > 0) $head[$h][1] .= (empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER) ? '<span class="badge marginleftonlyshort">'.$nbNote.'</span>' : '');
 		$head[$h][2] = 'note';
@@ -55,16 +55,16 @@ function gmaps_placePrepareHead($object)
 
 	require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 	require_once DOL_DOCUMENT_ROOT.'/core/class/link.class.php';
-	$upload_dir = $conf->gmaps->dir_output."/gmaps_place/".dol_sanitizeFileName($object->ref);
+	$upload_dir = $conf->gmaps->dir_output."/gmapsPlace/".dol_sanitizeFileName($object->ref);
 	$nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
 	$nbLinks = Link::count($db, $object->element, $object->id);
-	$head[$h][0] = dol_buildpath("/gmaps/gmaps_place_document.php", 1).'?id='.$object->id;
+	$head[$h][0] = dol_buildpath("/gmaps/gmapsPlace_document.php", 1).'?id='.$object->id;
 	$head[$h][1] = $langs->trans('Documents');
 	if (($nbFiles + $nbLinks) > 0) $head[$h][1] .= '<span class="badge marginleftonlyshort">'.($nbFiles + $nbLinks).'</span>';
 	$head[$h][2] = 'document';
 	$h++;
 
-	$head[$h][0] = dol_buildpath("/gmaps/gmaps_place_agenda.php", 1).'?id='.$object->id;
+	$head[$h][0] = dol_buildpath("/gmaps/gmapsPlace_agenda.php", 1).'?id='.$object->id;
 	$head[$h][1] = $langs->trans("Events");
 	$head[$h][2] = 'agenda';
 	$h++;
@@ -77,9 +77,9 @@ function gmaps_placePrepareHead($object)
 	//$this->tabs = array(
 	//	'entity:-tabname:Title:@gmaps:/gmaps/mypage.php?id=__ID__'
 	//); // to remove a tab
-	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmaps_place@gmaps');
+	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmapsPlace@gmaps');
 
-	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmaps_place@gmaps', 'remove');
+	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmapsPlace@gmaps', 'remove');
 
 	return $head;
 }

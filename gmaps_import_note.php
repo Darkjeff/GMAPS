@@ -58,7 +58,7 @@ if (!$res && file_exists("../../main.inc.php")) $res = @include "../../main.inc.
 if (!$res && file_exists("../../../main.inc.php")) $res = @include "../../../main.inc.php";
 if (!$res) die("Include of main fails");
 
-dol_include_once('/gmaps/class/gmaps_import.class.php');
+dol_include_once('/gmaps/class/gmapsimport.class.php');
 dol_include_once('/gmaps/lib/gmaps_gmaps_import.lib.php');
 
 // Load translation files required by the page
@@ -72,7 +72,7 @@ $cancel     = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects
-$object = new Gmaps_import($db);
+$object = gmapsImport($db);
 $extrafields = new ExtraFields($db);
 $diroutputmassaction = $conf->gmaps->dir_output.'/temp/massgeneration/'.$user->id;
 $hookmanager->initHooks(array('gmaps_importnote', 'globalcard')); // Note that conf->hooks_modules contains array

@@ -61,8 +61,8 @@ class modGmaps extends DolibarrModules
 		$this->description = "GmapsDescription";
 		// Used only if file README.md and README-LL.md not found.
 		$this->descriptionlong = "Gmaps description (Long)";
-		$this->editor_name = 'Editor name';
-		$this->editor_url = 'https://www.example.com';
+		$this->editor_name = 'JeffInfo';
+		//$this->editor_url = 'https://www.example.com';
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
 		$this->version = '1.0';
 		// Url to the file with your last numberversion of this module
@@ -226,8 +226,8 @@ class modGmaps extends DolibarrModules
 			//  0 => array(
 			//      'label' => 'MyJob label',
 			//      'jobtype' => 'method',
-			//      'class' => '/gmaps/class/gmaps_activity.class.php',
-			//      'objectname' => 'Gmaps_activity',
+			//      'class' => '/gmaps/class/gmapsactivity.class.php',
+			//      'objectname' => 'GmapsActivity',
 			//      'method' => 'doScheduledJob',
 			//      'parameters' => '',
 			//      'comment' => 'Comment',
@@ -250,17 +250,17 @@ class modGmaps extends DolibarrModules
 		/* BEGIN MODULEBUILDER PERMISSIONS */
 		$this->rights[$r][0] = $this->numero + $r; // Permission id (must not be already used)
 		$this->rights[$r][1] = 'Read objects of Gmaps'; // Permission label
-		$this->rights[$r][4] = 'gmaps_activity'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
+		$this->rights[$r][4] = 'gmapsActivity'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
 		$this->rights[$r][5] = 'read'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
 		$r++;
 		$this->rights[$r][0] = $this->numero + $r; // Permission id (must not be already used)
 		$this->rights[$r][1] = 'Create/Update objects of Gmaps'; // Permission label
-		$this->rights[$r][4] = 'gmaps_activity'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
+		$this->rights[$r][4] = 'gmapsActivity'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
 		$this->rights[$r][5] = 'write'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
 		$r++;
 		$this->rights[$r][0] = $this->numero + $r; // Permission id (must not be already used)
 		$this->rights[$r][1] = 'Delete objects of Gmaps'; // Permission label
-		$this->rights[$r][4] = 'gmaps_activity'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
+		$this->rights[$r][4] = 'gmapsActivity'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
 		$this->rights[$r][5] = 'delete'; // In php code, permission will be checked by test if ($user->rights->gmaps->level1->level2)
 		$r++;
 		/* END MODULEBUILDER PERMISSIONS */
@@ -280,51 +280,51 @@ class modGmaps extends DolibarrModules
 			'langs'=>'gmaps@gmaps', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>1000 + $r,
 			'enabled'=>'$conf->gmaps->enabled', // Define condition to show or hide menu entry. Use '$conf->gmaps->enabled' if entry must be visible if module is enabled.
-			'perms'=>'1', // Use 'perms'=>'$user->rights->gmaps->gmaps_activity->read' if you want your menu with a permission rules
+			'perms'=>'1', // Use 'perms'=>'$user->rights->gmaps->gmapsActivity->read' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2, // 0=Menu for internal users, 1=external users, 2=both
 		);
 		/* END MODULEBUILDER TOPMENU */
-		/* BEGIN MODULEBUILDER LEFTMENU GMAPS_ACTIVITY
+		/* BEGIN MODULEBUILDER LEFTMENU GMAPSACTIVITY
 		$this->menu[$r++]=array(
 			'fk_menu'=>'fk_mainmenu=gmaps',      // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 			'type'=>'left',                          // This is a Top menu entry
-			'titre'=>'Gmaps_activity',
+			'titre'=>'GmapsActivity',
 			'mainmenu'=>'gmaps',
-			'leftmenu'=>'gmaps_activity',
+			'leftmenu'=>'gmapsActivity',
 			'url'=>'/gmaps/gmapsindex.php',
 			'langs'=>'gmaps@gmaps',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>1000+$r,
 			'enabled'=>'$conf->gmaps->enabled',  // Define condition to show or hide menu entry. Use '$conf->gmaps->enabled' if entry must be visible if module is enabled.
-			'perms'=>'$user->rights->gmaps->gmaps_activity->read',			                // Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
+			'perms'=>'$user->rights->gmaps->gmapsActivity->read',			                // Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
 		);
 		$this->menu[$r++]=array(
-			'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmaps_activity',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+			'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmapsActivity',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 			'type'=>'left',			                // This is a Left menu entry
-			'titre'=>'List_Gmaps_activity',
+			'titre'=>'List_GmapsActivity',
 			'mainmenu'=>'gmaps',
-			'leftmenu'=>'gmaps_gmaps_activity_list',
+			'leftmenu'=>'gmaps_gmapsActivity_list',
 			'url'=>'/gmaps/gmaps_activity_list.php',
 			'langs'=>'gmaps@gmaps',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>1000+$r,
 			'enabled'=>'$conf->gmaps->enabled',  // Define condition to show or hide menu entry. Use '$conf->gmaps->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-			'perms'=>'$user->rights->gmaps->gmaps_activity->read',			                // Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
+			'perms'=>'$user->rights->gmaps->gmapsActivity->read',			                // Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
 		);
 		$this->menu[$r++]=array(
-			'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmaps_activity',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+			'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmapsActivity',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 			'type'=>'left',			                // This is a Left menu entry
-			'titre'=>'New_Gmaps_activity',
+			'titre'=>'New_GmapsActivity',
 			'mainmenu'=>'gmaps',
-			'leftmenu'=>'gmaps_gmaps_activity_new',
+			'leftmenu'=>'gmaps_gmapsActivity_new',
 			'url'=>'/gmaps/gmaps_activity_card.php?action=create',
 			'langs'=>'gmaps@gmaps',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>1000+$r,
 			'enabled'=>'$conf->gmaps->enabled',  // Define condition to show or hide menu entry. Use '$conf->gmaps->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-			'perms'=>'$user->rights->gmaps->gmaps_activity->write',			                // Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
+			'perms'=>'$user->rights->gmaps->gmapsActivity->write',			                // Use 'perms'=>'$user->rights->gmaps->level1->level2' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
 		);
@@ -355,9 +355,9 @@ class modGmaps extends DolibarrModules
             'fk_menu'=>'fk_mainmenu=gmaps',
             // This is a Left menu entry
             'type'=>'left',
-            'titre'=>'List_Gmaps_activity',
+            'titre'=>'List_GmapsActivity',
             'mainmenu'=>'gmaps',
-            'leftmenu'=>'gmaps_gmaps_activity',
+            'leftmenu'=>'gmaps_gmapsActivity',
             'url'=>'/gmaps/gmaps_activity_list.php',
             // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
             'langs'=>'gmaps@gmaps',
@@ -372,12 +372,12 @@ class modGmaps extends DolibarrModules
         );
         $this->menu[$r++]=array(
             // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmaps_gmaps_activity',
+            'fk_menu'=>'fk_mainmenu=gmaps,fk_leftmenu=gmaps_gmapsActivity',
             // This is a Left menu entry
             'type'=>'left',
-            'titre'=>'New_Gmaps_activity',
+            'titre'=>'New_GmapsActivity',
             'mainmenu'=>'gmaps',
-            'leftmenu'=>'gmaps_gmaps_activity',
+            'leftmenu'=>'gmaps_gmapsActivity',
             'url'=>'/gmaps/gmaps_activity_card.php?action=create',
             // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
             'langs'=>'gmaps@gmaps',
@@ -397,7 +397,7 @@ class modGmaps extends DolibarrModules
 			'type'=>'left',
 			'titre'=>'Alayse_KM',
 			'mainmenu'=>'gmaps',
-			'leftmenu'=>'gmaps_gmaps_activity',
+			'leftmenu'=>'gmaps_gmapsActivity',
 			'url'=>'/gmaps/gmaps_analyses_km.php',
 			// Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'langs'=>'gmaps@gmaps',
@@ -437,7 +437,7 @@ class modGmaps extends DolibarrModules
 			'type'=>'left',
 			'titre'=>'GmapsPrepareNDF',
 			'mainmenu'=>'gmaps',
-			'leftmenu'=>'gmaps_gmaps_activity',
+			'leftmenu'=>'gmaps_gmapsActivity',
 			'url'=>'/gmaps/gmaps_prepare_ndf.php',
 			// Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'langs'=>'gmaps@gmaps',
@@ -451,57 +451,57 @@ class modGmaps extends DolibarrModules
 			'user'=>0
 		);
 
-		/* END MODULEBUILDER LEFTMENU GMAPS_ACTIVITY */
+		/* END MODULEBUILDER LEFTMENU GMAPSACTIVITY */
 		// Exports profiles provided by this module
 		$r = 1;
-		/* BEGIN MODULEBUILDER EXPORT GMAPS_ACTIVITY */
+		/* BEGIN MODULEBUILDER EXPORT GMAPSACTIVITY */
 		/*
 		$langs->load("gmaps@gmaps");
 		$this->export_code[$r]=$this->rights_class.'_'.$r;
-		$this->export_label[$r]='Gmaps_activityLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-		$this->export_icon[$r]='gmaps_activity@gmaps';
+		$this->export_label[$r]='GmapsActivityLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
+		$this->export_icon[$r]='gmapsActivity@gmaps';
 		// Define $this->export_fields_array, $this->export_TypeFields_array and $this->export_entities_array
-		$keyforclass = 'Gmaps_activity'; $keyforclassfile='/gmaps/class/gmaps_activity.class.php'; $keyforelement='gmaps_activity@gmaps';
+		$keyforclass = 'GmapsActivity'; $keyforclassfile='/gmaps/class/gmapsactivity.class.php'; $keyforelement='gmapsActivity@gmaps';
 		include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
 		//$this->export_fields_array[$r]['t.fieldtoadd']='FieldToAdd'; $this->export_TypeFields_array[$r]['t.fieldtoadd']='Text';
 		//unset($this->export_fields_array[$r]['t.fieldtoremove']);
-		//$keyforclass = 'Gmaps_activityLine'; $keyforclassfile='/gmaps/class/gmaps_activity.class.php'; $keyforelement='gmaps_activityline@gmaps'; $keyforalias='tl';
+		//$keyforclass = 'GmapsActivityLine'; $keyforclassfile='/gmaps/class/gmapsactivity.class.php'; $keyforelement='gmapsActivityline@gmaps'; $keyforalias='tl';
 		//include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-		$keyforselect='gmaps_activity'; $keyforaliasextra='extra'; $keyforelement='gmaps_activity@gmaps';
+		$keyforselect='gmapsActivity'; $keyforaliasextra='extra'; $keyforelement='gmapsActivity@gmaps';
 		include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-		//$keyforselect='gmaps_activityline'; $keyforaliasextra='extraline'; $keyforelement='gmaps_activityline@gmaps';
+		//$keyforselect='gmapsActivityline'; $keyforaliasextra='extraline'; $keyforelement='gmapsActivityline@gmaps';
 		//include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-		//$this->export_dependencies_array[$r] = array('gmaps_activityline'=>array('tl.rowid','tl.ref')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
+		//$this->export_dependencies_array[$r] = array('gmapsActivityline'=>array('tl.rowid','tl.ref')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
 		//$this->export_special_array[$r] = array('t.field'=>'...');
 		//$this->export_examplevalues_array[$r] = array('t.field'=>'Example');
 		//$this->export_help_array[$r] = array('t.field'=>'FieldDescHelp');
 		$this->export_sql_start[$r]='SELECT DISTINCT ';
-		$this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'gmaps_activity as t';
-		//$this->export_sql_end[$r]  =' LEFT JOIN '.MAIN_DB_PREFIX.'gmaps_activity_line as tl ON tl.fk_gmaps_activity = t.rowid';
+		$this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'gmapsActivity as t';
+		//$this->export_sql_end[$r]  =' LEFT JOIN '.MAIN_DB_PREFIX.'gmapsActivity_line as tl ON tl.fk_gmapsActivity = t.rowid';
 		$this->export_sql_end[$r] .=' WHERE 1 = 1';
-		$this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('gmaps_activity').')';
+		$this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('gmapsActivity').')';
 		$r++; */
-		/* END MODULEBUILDER EXPORT GMAPS_ACTIVITY */
+		/* END MODULEBUILDER EXPORT GMAPSACTIVITY */
 
 		// Imports profiles provided by this module
 		$r = 1;
-		/* BEGIN MODULEBUILDER IMPORT GMAPS_ACTIVITY */
+		/* BEGIN MODULEBUILDER IMPORT GMAPSACTIVITY */
 		/*
 		 $langs->load("gmaps@gmaps");
 		 $this->export_code[$r]=$this->rights_class.'_'.$r;
-		 $this->export_label[$r]='Gmaps_activityLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-		 $this->export_icon[$r]='gmaps_activity@gmaps';
-		 $keyforclass = 'Gmaps_activity'; $keyforclassfile='/gmaps/class/gmaps_activity.class.php'; $keyforelement='gmaps_activity@gmaps';
+		 $this->export_label[$r]='GmapsActivityLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
+		 $this->export_icon[$r]='gmapsActivity@gmaps';
+		 $keyforclass = 'GmapsActivity'; $keyforclassfile='/gmaps/class/gmapsactivity.class.php'; $keyforelement='gmapsActivity@gmaps';
 		 include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-		 $keyforselect='gmaps_activity'; $keyforaliasextra='extra'; $keyforelement='gmaps_activity@gmaps';
+		 $keyforselect='gmapsActivity'; $keyforaliasextra='extra'; $keyforelement='gmapsActivity@gmaps';
 		 include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
 		 //$this->export_dependencies_array[$r]=array('mysubobject'=>'ts.rowid', 't.myfield'=>array('t.myfield2','t.myfield3')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
 		 $this->export_sql_start[$r]='SELECT DISTINCT ';
-		 $this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'gmaps_activity as t';
+		 $this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'gmapsActivity as t';
 		 $this->export_sql_end[$r] .=' WHERE 1 = 1';
-		 $this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('gmaps_activity').')';
+		 $this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('gmapsActivity').')';
 		 $r++; */
-		/* END MODULEBUILDER IMPORT GMAPS_ACTIVITY */
+		/* END MODULEBUILDER IMPORT GMAPSACTIVITY */
 	}
 
 	/**
@@ -522,8 +522,8 @@ class modGmaps extends DolibarrModules
 		// Create extrafields during init
 		include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
 		$extrafields = new ExtraFields($this->db);
-		$param['options']['gmaps_gmaps_place:CONCAT(location_name,\' \',location_address_raw):rowid::']=null;
-		$result1=$extrafields->addExtraField('fk_gmaps_gmaps_place', "Lieu Gmaps", 'chkbxlst', 1,  '', 'thirdparty',   0, 0, '', $param, 1, '', 1, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
+		$param['options']['gmaps_gmapsplace:CONCAT(location_name,\' \',location_address_raw):rowid::']=null;
+		$result1=$extrafields->addExtraField('fk_gmaps_gmapsplace', "Lieu Gmaps", 'chkbxlst', 1,  '', 'thirdparty',   0, 0, '', $param, 1, '', 1, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
 		//$result2=$extrafields->addExtraField('gmaps_myattr2', "New Attr 2 label", 'varchar', 1, 10, 'project',      0, 0, '', '', 1, '', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
 		//$result3=$extrafields->addExtraField('gmaps_myattr3', "New Attr 3 label", 'varchar', 1, 10, 'bank_account', 0, 0, '', '', 1, '', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
 		//$result4=$extrafields->addExtraField('gmaps_myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1,'', 0, 0, '', '', 'gmaps@gmaps', '$conf->gmaps->enabled');
@@ -537,14 +537,14 @@ class modGmaps extends DolibarrModules
 		// Document templates
 		$moduledir = 'gmaps';
 		$myTmpObjects = array();
-		$myTmpObjects['Gmaps_activity']=array('includerefgeneration'=>0, 'includedocgeneration'=>0);
+		$myTmpObjects['GmapsActivity']=array('includerefgeneration'=>0, 'includedocgeneration'=>0);
 
 		foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
-			if ($myTmpObjectKey == 'Gmaps_activity') continue;
+			if ($myTmpObjectKey == 'GmapsActivity') continue;
 			if ($myTmpObjectArray['includerefgeneration']) {
-				$src=DOL_DOCUMENT_ROOT.'/install/doctemplates/gmaps/template_gmaps_activitys.odt';
+				$src=DOL_DOCUMENT_ROOT.'/install/doctemplates/gmaps/template_gmapsActivitys.odt';
 				$dirodt=DOL_DATA_ROOT.'/doctemplates/gmaps';
-				$dest=$dirodt.'/template_gmaps_activitys.odt';
+				$dest=$dirodt.'/template_gmapsActivitys.odt';
 
 				if (file_exists($src) && ! file_exists($dest))
 				{

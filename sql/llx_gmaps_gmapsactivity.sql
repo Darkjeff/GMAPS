@@ -14,14 +14,28 @@
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 
 
--- BEGIN MODULEBUILDER INDEXES
-ALTER TABLE llx_gmaps_gmaps_import ADD INDEX idx_gmaps_gmaps_import_rowid (rowid);
-ALTER TABLE llx_gmaps_gmaps_import ADD INDEX idx_gmaps_gmaps_import_ref (ref);
-ALTER TABLE llx_gmaps_gmaps_import ADD CONSTRAINT llx_gmaps_gmaps_import_fk_user_creat FOREIGN KEY (fk_user_creat) REFERENCES llx_user(rowid);
-ALTER TABLE llx_gmaps_gmaps_import ADD INDEX idx_gmaps_gmaps_import_status (status);
--- END MODULEBUILDER INDEXES
-
---ALTER TABLE llx_gmaps_gmaps_import ADD UNIQUE INDEX uk_gmaps_gmaps_import_fieldxy(fieldx, fieldy);
-
---ALTER TABLE llx_gmaps_gmaps_import ADD CONSTRAINT llx_gmaps_gmaps_import_fk_field FOREIGN KEY (fk_field) REFERENCES llx_gmaps_myotherobject(rowid);
-
+CREATE TABLE llx_gmaps_gmapsactivity(
+	-- BEGIN MODULEBUILDER FIELDS
+	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
+	ref varchar(128) NOT NULL, 
+	label varchar(255), 
+	fk_soc integer, 
+	fk_project integer, 
+	description text, 
+	note_public text, 
+	note_private text, 
+	date_creation datetime NOT NULL, 
+	tms timestamp, 
+	fk_user_creat integer NOT NULL, 
+	fk_user_modif integer, 
+	import_key varchar(14), 
+	status smallint NOT NULL, 
+	location_start_long integer, 
+	location_start_lat integer, 
+	location_end_long integer, 
+	location_end_lat integer, 
+	duration_start timestamp, 
+	duration_end timestamp, 
+	distance integer
+	-- END MODULEBUILDER FIELDS
+) ENGINE=innodb;

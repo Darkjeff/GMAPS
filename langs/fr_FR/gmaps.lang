@@ -55,12 +55,13 @@ List_Gmaps_activity = Liste des déplacement
 Alayse_KM=Analyse KM
 GmapsPrepareNDF= Générer les note de frais
 List_Gmaps_import=Import fichier Gmaps
+GmapsActivity=Activité Gmaps
 
 
 #
 # Page
 #
-Gmaps_activitys = Liste des déplacement
+GmapsActivitys = Liste des déplacement
 GmapsAreaKM = Analyse KM
 GmapsAreaTemps = Analyse Temps (min.)
 GmapsArea = Traitement fichier GMaps
@@ -73,5 +74,3 @@ LatitudeEnd = Latitude arrivé
 LongitudeStart = Longitude départ
 DurationStart = Heure de début
 DurationEnd = Heure de fin
-
-

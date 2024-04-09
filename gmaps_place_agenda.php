@@ -17,9 +17,9 @@
  */
 
 /**
- *  \file       gmaps_place_agenda.php
+ *  \file       gmapsPlace_agenda.php
  *  \ingroup    gmaps
- *  \brief      Tab of events on Gmaps_place
+ *  \brief      Tab of events on GmapsPlace
  */
 
 //if (! defined('NOREQUIREDB'))              define('NOREQUIREDB', '1');				// Do not create database handler $db
@@ -61,8 +61,8 @@ if (!$res) die("Include of main fails");
 require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-dol_include_once('/gmaps/class/gmaps_place.class.php');
-dol_include_once('/gmaps/lib/gmaps_gmaps_place.lib.php');
+dol_include_once('/gmaps/class/gmapsplace.class.php');
+dol_include_once('/gmaps/lib/gmaps_gmapsPlace.lib.php');
 
 
 // Load translation files required by the page
@@ -95,10 +95,10 @@ if (!$sortfield) $sortfield = 'a.datep,a.id';
 if (!$sortorder) $sortorder = 'DESC,DESC';
 
 // Initialize technical objects
-$object = new Gmaps_place($db);
+$object = new GmapsPlace($db);
 $extrafields = new ExtraFields($db);
 $diroutputmassaction = $conf->gmaps->dir_output.'/temp/massgeneration/'.$user->id;
-$hookmanager->initHooks(array('gmaps_placeagenda', 'globalcard')); // Note that conf->hooks_modules contains array
+$hookmanager->initHooks(array('gmapsPlaceagenda', 'globalcard')); // Note that conf->hooks_modules contains array
 // Fetch optionals attributes and labels
 $extrafields->fetch_name_optionals_label($object->table_element);
 
@@ -111,7 +111,7 @@ if ($id > 0 || !empty($ref)) $upload_dir = $conf->gmaps->multidir_output[$object
 //if ($user->socid > 0) $socid = $user->socid;
 //$result = restrictedArea($user, 'gmaps', $object->id);
 
-$permissiontoadd = $user->rights->gmaps->gmaps_place->write; // Used by the include of actions_addupdatedelete.inc.php
+$permissiontoadd = $user->rights->gmaps->gmapsPlace->write; // Used by the include of actions_addupdatedelete.inc.php
 
 
 /*
@@ -155,14 +155,14 @@ if ($object->id > 0)
 	llxHeader('', $title, $help_url);
 
 	if (!empty($conf->notification->enabled)) $langs->load("mails");
-	$head = gmaps_placePrepareHead($object);
+	$head = gmapsPlacePrepareHead($object);
 
 
-	print dol_get_fiche_head($head, 'agenda', $langs->trans("Gmaps_place"), -1, 'object_'.$object->picto);
+	print dol_get_fiche_head($head, 'agenda', $langs->trans("GmapsPlace"), -1, 'object_'.$object->picto);
 
 	// Object card
 	// ------------------------------------------------------------
-	$linkback = '<a href="'.dol_buildpath('/gmaps/gmaps_place_list.php', 1).'?restore_lastsearch_values=1'.(!empty($socid) ? '&socid='.$socid : '').'">'.$langs->trans("BackToList").'</a>';
+	$linkback = '<a href="'.dol_buildpath('/gmaps/gmapsPlace_list.php', 1).'?restore_lastsearch_values=1'.(!empty($socid) ? '&socid='.$socid : '').'">'.$langs->trans("BackToList").'</a>';
 
 	$morehtmlref = '<div class="refidno">';
 	/*
@@ -260,7 +260,7 @@ if ($object->id > 0)
 		if ($limit > 0 && $limit != $conf->liste_limit) $param .= '&limit='.urlencode($limit);
 
 
-		//print load_fiche_titre($langs->trans("ActionsOnGmaps_place"), '', '');
+		//print load_fiche_titre($langs->trans("ActionsOnGmapsPlace"), '', '');
 
 		// List of all actions
 		$filters = array();

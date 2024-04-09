@@ -47,7 +47,7 @@ if (!$res) die("Include of main fails");
 
 require_once DOL_DOCUMENT_ROOT . '/core/class/html.formfile.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-dol_include_once('/gmaps/class/gmaps_import.class.php');
+dol_include_once('/gmaps/class/gmapsimport.class.php');
 
 // Load translation files required by the page
 $langs->loadLangs(array("gmaps@gmaps"));
@@ -85,7 +85,7 @@ $permissiontoadd = 1;
 
 if ($action=='editfile') {
 	$action='';
-	$import = new Gmaps_import($db);
+	$import = new gmapsImport($db);
 	$result = $import->importFile($upload_dir.'/'.GETPOST("urlfile"), $user);
 	if ($result < 0) {
 		setEventMessages($import->error,$import->errors,'errors');

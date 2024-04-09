@@ -17,9 +17,9 @@
  */
 
 /**
- * \file        class/gmaps_activity.class.php
+ * \file        class/gmapsplace.class.php
  * \ingroup     gmaps
- * \brief       This file is a CRUD class file for Gmaps_activity (Create/Read/Update/Delete)
+ * \brief       This file is a CRUD class file for GmapsPlace (Create/Read/Update/Delete)
  */
 
 // Put here all includes required by your class file
@@ -28,9 +28,9 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/commonobject.class.php';
 //require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 /**
- * Class for Gmaps_activity
+ * Class for GmapsPlace
  */
-class Gmaps_activity extends CommonObject
+class GmapsPlace extends CommonObject
 {
 	/**
 	 * @var string ID of module.
@@ -40,12 +40,12 @@ class Gmaps_activity extends CommonObject
 	/**
 	 * @var string ID to identify managed object.
 	 */
-	public $element = 'gmaps_activity';
+	public $element = 'gmapsplace';
 
 	/**
 	 * @var string Name of table without prefix where object is stored. This is also the key used for extrafields management.
 	 */
-	public $table_element = 'gmaps_gmaps_activity';
+	public $table_element = 'gmaps_gmapsplace';
 
 	/**
 	 * @var int  Does this object support multicompany module ?
@@ -59,9 +59,9 @@ class Gmaps_activity extends CommonObject
 	public $isextrafieldmanaged = 1;
 
 	/**
-	 * @var string String with name of icon for gmaps_activity. Must be the part after the 'object_' into object_gmaps_activity.png
+	 * @var string String with name of icon for gmapsPlace. Must be the part after the 'object_' into object_gmapsPlace.png
 	 */
-	public $picto = 'gmaps_activity@gmaps';
+	public $picto = 'gmapsPlace@gmaps';
 
 
 	const STATUS_DRAFT = 0;
@@ -100,9 +100,8 @@ class Gmaps_activity extends CommonObject
 	 */
 	public $fields=array(
 		'rowid' => array('type'=>'integer', 'label'=>'TechnicalID', 'enabled'=>'1', 'position'=>1, 'notnull'=>1, 'visible'=>0, 'noteditable'=>'1', 'index'=>1, 'css'=>'left', 'comment'=>"Id"),
-		'ref' => array('type'=>'varchar(128)', 'label'=>'Ref', 'enabled'=>'1', 'position'=>10, 'notnull'=>1, 'visible'=>1, 'index'=>1, 'searchall'=>1, 'showoncombobox'=>'1', 'comment'=>"Reference of object"),
-		'label' => array('type'=>'varchar(255)', 'label'=>'Label', 'enabled'=>'1', 'position'=>30, 'notnull'=>0, 'visible'=>1, 'searchall'=>1, 'css'=>'minwidth300', 'help'=>"Help text", 'showoncombobox'=>'1',),
-		'fk_soc' => array('type'=>'integer:Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))', 'label'=>'ThirdParty', 'enabled'=>'1', 'position'=>50, 'notnull'=>-1, 'visible'=>1, 'index'=>1, 'help'=>"LinkToThirparty",),
+		'ref' => array('type'=>'varchar(128)', 'label'=>'Ref', 'enabled'=>'1', 'position'=>10, 'notnull'=>-1, 'visible'=>1, 'index'=>1, 'searchall'=>1, 'showoncombobox'=>'1', 'comment'=>"Reference of object"),
+		'fk_soc' => array('type'=>'integer:Societe:societe/class/societe.class.php:1:status=1 AND entity IN (__SHARED_ENTITIES__)', 'label'=>'ThirdParty', 'enabled'=>'1', 'position'=>50, 'notnull'=>-1, 'visible'=>1, 'index'=>1, 'help'=>"LinkToThirparty",),
 		'fk_project' => array('type'=>'integer:Project:projet/class/project.class.php:1', 'label'=>'Project', 'enabled'=>'1', 'position'=>52, 'notnull'=>-1, 'visible'=>-1, 'index'=>1,),
 		'description' => array('type'=>'text', 'label'=>'Description', 'enabled'=>'1', 'position'=>60, 'notnull'=>0, 'visible'=>3,),
 		'note_public' => array('type'=>'html', 'label'=>'NotePublic', 'enabled'=>'1', 'position'=>61, 'notnull'=>0, 'visible'=>0,),
@@ -113,17 +112,15 @@ class Gmaps_activity extends CommonObject
 		'fk_user_modif' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'UserModif', 'enabled'=>'1', 'position'=>511, 'notnull'=>-1, 'visible'=>-2,),
 		'import_key' => array('type'=>'varchar(14)', 'label'=>'ImportId', 'enabled'=>'1', 'position'=>1000, 'notnull'=>-1, 'visible'=>-2,),
 		'status' => array('type'=>'smallint', 'label'=>'Status', 'enabled'=>'1', 'position'=>1000, 'notnull'=>1, 'visible'=>1, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Brouillon', '1'=>'Valid&eacute;', '9'=>'Annul&eacute;'),),
-		'location_start_long' => array('type'=>'integer', 'label'=>'LongitudeStart', 'enabled'=>'1', 'position'=>41, 'notnull'=>-1, 'visible'=>1,),
-		'location_start_lat' => array('type'=>'integer', 'label'=>'LatitudeStart', 'enabled'=>'1', 'position'=>40, 'notnull'=>-1, 'visible'=>1,),
-		'location_end_long' => array('type'=>'integer', 'label'=>'LongitudeEnd', 'enabled'=>'1', 'position'=>42, 'notnull'=>-1, 'visible'=>1,),
-		'location_end_lat' => array('type'=>'integer', 'label'=>'LatitudeEnd', 'enabled'=>'1', 'position'=>43, 'notnull'=>-1, 'visible'=>1,),
-		'duration_start' => array('type'=>'datetime', 'label'=>'DurationStart', 'enabled'=>'1', 'position'=>44, 'notnull'=>-1, 'visible'=>1,),
-		'duration_end' => array('type'=>'datetime', 'label'=>'DurationEnd', 'enabled'=>'1', 'position'=>45, 'notnull'=>-1, 'visible'=>1,),
-		'distance' => array('type'=>'integer', 'label'=>'Distance', 'enabled'=>'1', 'position'=>46, 'notnull'=>-1, 'visible'=>1,),
+		'fk_gmapsactivity' => array('type'=>'integer:GmapsActivity:gmaps/class/gmapsactivity.class.php:1', 'label'=>'Activity', 'enabled'=>'1', 'position'=>40, 'notnull'=>1, 'visible'=>-1, 'index'=>1,),
+		'location_placeid' => array('type'=>'varchar(50)', 'label'=>'PlaceId', 'enabled'=>'1', 'position'=>40, 'notnull'=>-1, 'visible'=>1,),
+		'location_address_raw' => array('type'=>'varchar(200)', 'label'=>'PlaceAdress', 'enabled'=>'1', 'position'=>41, 'notnull'=>-1, 'visible'=>1,),
+		'location_name' => array('type'=>'varchar(200)', 'label'=>'PlaceName', 'enabled'=>'1', 'position'=>42, 'notnull'=>-1, 'visible'=>1,),
+		'duration_start' => array('type'=>'datetime', 'label'=>'DurationStart', 'enabled'=>'1', 'position'=>43, 'notnull'=>-1, 'visible'=>1,),
+		'duration_end' => array('type'=>'datetime', 'label'=>'DurationEnd', 'enabled'=>'1', 'position'=>44, 'notnull'=>-1, 'visible'=>1,),
 	);
 	public $rowid;
 	public $ref;
-	public $label;
 	public $fk_soc;
 	public $fk_project;
 	public $description;
@@ -135,13 +132,12 @@ class Gmaps_activity extends CommonObject
 	public $fk_user_modif;
 	public $import_key;
 	public $status;
-	public $location_start_long;
-	public $location_start_lat;
-	public $location_end_long;
-	public $location_end_lat;
+	public $fk_gmapsActivity;
+	public $location_placeid;
+	public $location_address_raw;
+	public $location_name;
 	public $duration_start;
 	public $duration_end;
-	public $distance;
 	// END MODULEBUILDER PROPERTIES
 
 
@@ -150,17 +146,17 @@ class Gmaps_activity extends CommonObject
 	/**
 	 * @var int    Name of subtable line
 	 */
-	//public $table_element_line = 'gmaps_gmaps_activityline';
+	//public $table_element_line = 'gmaps_gmapsPlaceline';
 
 	/**
 	 * @var int    Field with ID of parent key if this object has a parent
 	 */
-	//public $fk_element = 'fk_gmaps_activity';
+	//public $fk_element = 'fk_gmapsPlace';
 
 	/**
 	 * @var int    Name of subtable class that manage subtable lines
 	 */
-	//public $class_element_line = 'Gmaps_activityline';
+	//public $class_element_line = 'GmapsPlaceline';
 
 	/**
 	 * @var array	List of child tables. To test if we can delete object.
@@ -169,20 +165,15 @@ class Gmaps_activity extends CommonObject
 
 	/**
 	 * @var array    List of child tables. To know object to delete on cascade.
-	 *               If name matches '@ClassNAme:FilePathClass:ParentFkFieldName' it will
+	 *               If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
 	 *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
 	 */
-	protected $childtablesoncascade = array('@Gmaps_place:/gmaps/class/gmaps_place.class.php:fk_gmaps_activity');
+	//protected $childtablesoncascade = array('gmaps_gmapsPlacedet');
 
 	/**
-	 * @var Gmaps_activityLine[]     Array of subtable lines
+	 * @var GmapsPlaceLine[]     Array of subtable lines
 	 */
 	//public $lines = array();
-
-	/**
-	 * @var Gmaps_activityPlaces[]     Array of places linked
-	 */
-	public $places = array();
 
 
 
@@ -201,7 +192,7 @@ class Gmaps_activity extends CommonObject
 		if (empty($conf->multicompany->enabled) && isset($this->fields['entity'])) $this->fields['entity']['enabled'] = 0;
 
 		// Example to show how to set values of fields definition dynamically
-		/*if ($user->rights->gmaps->gmaps_activity->read) {
+		/*if ($user->rights->gmaps->gmapsPlace->read) {
 			$this->fields['myfield']['visible'] = 1;
 			$this->fields['myfield']['noteditable'] = 0;
 		}*/
@@ -362,62 +353,6 @@ class Gmaps_activity extends CommonObject
 		return $result;
 	}
 
-	/**
-	 * Load object lines in memory from the database
-	 *
-	 * @return int         <0 if KO, 0 if not found, >0 if OK
-	 */
-	public function fetchPlaces()
-	{
-		$this->places = array();
-		dol_include_once('/gmaps/class/gmaps_place.class.php');
-
-		$place = new Gmaps_place($this->db);
-		$result = $place->fetchAll('','', 0, 0, array('t.fk_gmaps_activity'=>$this->id));
-		if (is_array($result) && count($result)>0) {
-			$this->places=$result;
-		} else {
-			return $result;
-		}
-	}
-
-	public function findThirdpartyLinked() {
-		global $cached_places;
-		if (!isset($cached_places)) {
-			$cached_places=array();
-		}
-		if (is_array($this->places) && count($this->places)>0 && empty($this->fk_soc)) {
-			foreach($this->places as $place) {
-				if (!key_exists($place->id,$cached_places)) {
-					$sql = 'SELECT fk_object FROM ' . MAIN_DB_PREFIX . 'societe_extrafields WHERE ';
-					$sql .= ' ( fk_gmaps_gmaps_place=\'' . $place->id . '\' OR ';
-					$sql .= ' fk_gmaps_gmaps_place LIKE \'' . $place->id . ',%\' OR ';
-					$sql .= ' fk_gmaps_gmaps_place LIKE \'%,' . $place->id . ',%\'';
-					$sql .= ' )';
-					$resql = $this->db->query($sql);
-					if ($resql) {
-						while ($obj = $this->db->fetch_object($resql)) {
-							$soc_id = $obj->fk_object;
-							$cached_places[$place->id] = $soc_id;
-							break;
-						}
-						$this->db->free($resql);
-
-						return $soc_id;
-					} else {
-						$this->errors[] = 'Error ' . $this->db->lasterror();
-						dol_syslog(__METHOD__ . ' ' . join(',', $this->errors), LOG_ERR);
-
-						return -1;
-					}
-				} else {
-					return $cached_places[$place->id];
-				}
-			}
-		} else {
-			return null;
-		}
-	}
 
 	/**
 	 * Load list of objects in memory from the database.
@@ -447,7 +382,7 @@ class Gmaps_activity extends CommonObject
 		$sqlwhere = array();
 		if (count($filter) > 0) {
 			foreach ($filter as $key => $value) {
-				if ($key == 't.rowid') {
+				if ($key == 't.rowid' || $key == 't.fk_gmapsActivity') {
 					$sqlwhere[] = $key.'='.$value;
 				} elseif (in_array($this->fields[$key]['type'], array('date', 'datetime', 'timestamp'))) {
 					$sqlwhere[] = $key.' = \''.$this->db->idate($value).'\'';
@@ -564,8 +499,8 @@ class Gmaps_activity extends CommonObject
 			return 0;
 		}
 
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->gmaps->gmaps_activity->write))
-		 || (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->gmaps->gmaps_activity->gmaps_activity_advance->validate))))
+		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->gmaps->gmapsPlace->write))
+		 || (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->gmaps->gmapsPlace->gmapsPlace_advance->validate))))
 		 {
 		 $this->error='NotEnoughPermissions';
 		 dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
@@ -606,7 +541,7 @@ class Gmaps_activity extends CommonObject
 			if (!$error && !$notrigger)
 			{
 				// Call trigger
-				$result = $this->call_trigger('GMAPS_ACTIVITY_VALIDATE', $user);
+				$result = $this->call_trigger('GMAPSPLACE_VALIDATE', $user);
 				if ($result < 0) $error++;
 				// End call triggers
 			}
@@ -620,16 +555,16 @@ class Gmaps_activity extends CommonObject
 			if (preg_match('/^[\(]?PROV/i', $this->ref))
 			{
 				// Now we rename also files into index
-				$sql = 'UPDATE '.MAIN_DB_PREFIX."ecm_files set filename = CONCAT('".$this->db->escape($this->newref)."', SUBSTR(filename, ".(strlen($this->ref) + 1).")), filepath = 'gmaps_activity/".$this->db->escape($this->newref)."'";
-				$sql .= " WHERE filename LIKE '".$this->db->escape($this->ref)."%' AND filepath = 'gmaps_activity/".$this->db->escape($this->ref)."' and entity = ".$conf->entity;
+				$sql = 'UPDATE '.MAIN_DB_PREFIX."ecm_files set filename = CONCAT('".$this->db->escape($this->newref)."', SUBSTR(filename, ".(strlen($this->ref) + 1).")), filepath = 'gmapsPlace/".$this->db->escape($this->newref)."'";
+				$sql .= " WHERE filename LIKE '".$this->db->escape($this->ref)."%' AND filepath = 'gmapsPlace/".$this->db->escape($this->ref)."' and entity = ".$conf->entity;
 				$resql = $this->db->query($sql);
 				if (!$resql) { $error++; $this->error = $this->db->lasterror(); }
 
 				// We rename directory ($this->ref = old ref, $num = new ref) in order not to lose the attachments
 				$oldref = dol_sanitizeFileName($this->ref);
 				$newref = dol_sanitizeFileName($num);
-				$dirsource = $conf->gmaps->dir_output.'/gmaps_activity/'.$oldref;
-				$dirdest = $conf->gmaps->dir_output.'/gmaps_activity/'.$newref;
+				$dirsource = $conf->gmaps->dir_output.'/gmapsPlace/'.$oldref;
+				$dirdest = $conf->gmaps->dir_output.'/gmapsPlace/'.$newref;
 				if (!$error && file_exists($dirsource))
 				{
 					dol_syslog(get_class($this)."::validate() rename dir ".$dirsource." into ".$dirdest);
@@ -638,7 +573,7 @@ class Gmaps_activity extends CommonObject
 					{
 						dol_syslog("Rename ok");
 						// Rename docs starting with $oldref with $newref
-						$listoffiles = dol_dir_list($conf->gmaps->dir_output.'/gmaps_activity/'.$newref, 'files', 1, '^'.preg_quote($oldref, '/'));
+						$listoffiles = dol_dir_list($conf->gmaps->dir_output.'/gmapsPlace/'.$newref, 'files', 1, '^'.preg_quote($oldref, '/'));
 						foreach ($listoffiles as $fileentry)
 						{
 							$dirsource = $fileentry['name'];
@@ -692,7 +627,7 @@ class Gmaps_activity extends CommonObject
 		 return -1;
 		 }*/
 
-		return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'GMAPS_ACTIVITY_UNVALIDATE');
+		return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'GMAPSPLACE_UNVALIDATE');
 	}
 
 	/**
@@ -717,7 +652,7 @@ class Gmaps_activity extends CommonObject
 		 return -1;
 		 }*/
 
-		return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'GMAPS_ACTIVITY_CLOSE');
+		return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'GMAPSPLACE_CLOSE');
 	}
 
 	/**
@@ -742,7 +677,7 @@ class Gmaps_activity extends CommonObject
 		 return -1;
 		 }*/
 
-		return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'GMAPS_ACTIVITY_REOPEN');
+		return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'GMAPSPLACE_REOPEN');
 	}
 
 	/**
@@ -763,14 +698,14 @@ class Gmaps_activity extends CommonObject
 
 		$result = '';
 
-		$label = img_picto('', $this->picto).' <u>'.$langs->trans("Gmaps_activity").'</u>';
+		$label = img_picto('', $this->picto).' <u>'.$langs->trans("GmapsPlace").'</u>';
 		$label .= '<br>';
 		$label .= '<b>'.$langs->trans('Ref').':</b> '.$this->ref;
 		if (isset($this->status)) {
 			$label .= '<br><b>'.$langs->trans("Status").":</b> ".$this->getLibStatut(5);
 		}
 
-		$url = dol_buildpath('/gmaps/gmaps_activity_card.php', 1).'?id='.$this->id;
+		$url = dol_buildpath('/gmaps/gmapsPlace_card.php', 1).'?id='.$this->id;
 
 		if ($option != 'nolink')
 		{
@@ -785,7 +720,7 @@ class Gmaps_activity extends CommonObject
 		{
 			if (!empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER))
 			{
-				$label = $langs->trans("ShowGmaps_activity");
+				$label = $langs->trans("ShowGmapsPlace");
 				$linkclose .= ' alt="'.dol_escape_htmltag($label, 1).'"';
 			}
 			$linkclose .= ' title="'.dol_escape_htmltag($label, 1).'"';
@@ -831,7 +766,7 @@ class Gmaps_activity extends CommonObject
 		//if ($withpicto != 2) $result.=(($addlabel && $this->label) ? $sep . dol_trunc($this->label, ($addlabel > 1 ? $addlabel : 0)) : '');
 
 		global $action, $hookmanager;
-		$hookmanager->initHooks(array('gmaps_activitydao'));
+		$hookmanager->initHooks(array('gmapsPlacedao'));
 		$parameters = array('id'=>$this->id, 'getnomurl'=>$result);
 		$reshook = $hookmanager->executeHooks('getNomUrl', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
 		if ($reshook > 0) $result = $hookmanager->resPrint;
@@ -952,8 +887,8 @@ class Gmaps_activity extends CommonObject
 	{
 		$this->lines = array();
 
-		$objectline = new Gmaps_activityLine($this->db);
-		$result = $objectline->fetchAll('ASC', 'position', 0, 0, array('customsql'=>'fk_gmaps_activity = '.$this->id));
+		$objectline = new GmapsPlaceLine($this->db);
+		$result = $objectline->fetchAll('ASC', 'position', 0, 0, array('customsql'=>'fk_gmapsPlace = '.$this->id));
 
 		if (is_numeric($result))
 		{
@@ -976,16 +911,16 @@ class Gmaps_activity extends CommonObject
 		global $langs, $conf;
 		$langs->load("gmaps@gmaps");
 
-		if (empty($conf->global->GMAPS_GMAPS_ACTIVITY_ADDON)) {
-			$conf->global->GMAPS_GMAPS_ACTIVITY_ADDON = 'mod_gmaps_activity_standard';
+		if (empty($conf->global->GMAPS_GMAPSPLACE_ADDON)) {
+			$conf->global->GMAPS_GMAPSPLACE_ADDON = 'mod_gmapsPlace_standard';
 		}
 
-		if (!empty($conf->global->GMAPS_GMAPS_ACTIVITY_ADDON))
+		if (!empty($conf->global->GMAPS_GMAPSPLACE_ADDON))
 		{
 			$mybool = false;
 
-			$file = $conf->global->GMAPS_GMAPS_ACTIVITY_ADDON.".php";
-			$classname = $conf->global->GMAPS_GMAPS_ACTIVITY_ADDON;
+			$file = $conf->global->GMAPS_GMAPSPLACE_ADDON.".php";
+			$classname = $conf->global->GMAPS_GMAPSPLACE_ADDON;
 
 			// Include file with class
 			$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
@@ -1046,12 +981,12 @@ class Gmaps_activity extends CommonObject
 		$langs->load("gmaps@gmaps");
 
 		if (!dol_strlen($modele)) {
-			$modele = 'standard_gmaps_activity';
+			$modele = 'standard_gmapsPlace';
 
 			if ($this->model_pdf) {
 				$modele = $this->model_pdf;
-			} elseif (!empty($conf->global->GMAPS_ACTIVITY_ADDON_PDF)) {
-				$modele = $conf->global->GMAPS_ACTIVITY_ADDON_PDF;
+			} elseif (!empty($conf->global->GMAPSPLACE_ADDON_PDF)) {
+				$modele = $conf->global->GMAPSPLACE_ADDON_PDF;
 			}
 		}
 
@@ -1099,12 +1034,12 @@ class Gmaps_activity extends CommonObject
 require_once DOL_DOCUMENT_ROOT.'/core/class/commonobjectline.class.php';
 
 /**
- * Class Gmaps_activityLine. You can also remove this and generate a CRUD class for lines objects.
+ * Class GmapsPlaceLine. You can also remove this and generate a CRUD class for lines objects.
  */
-class Gmaps_activityLine extends CommonObjectLine
+class GmapsPlaceLine extends CommonObjectLine
 {
-	// To complete with content of an object Gmaps_activityLine
-	// We should have a field rowid, fk_gmaps_activity and position
+	// To complete with content of an object GmapsPlaceLine
+	// We should have a field rowid, fk_gmapsPlace and position
 
 	/**
 	 * @var int  Does object support extrafields ? 0=No, 1=Yes

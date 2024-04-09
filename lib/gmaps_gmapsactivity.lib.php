@@ -16,18 +16,18 @@
  */
 
 /**
- * \file    lib/gmaps_gmaps_activity.lib.php
+ * \file    lib/gmaps_gmapsactivity.lib.php
  * \ingroup gmaps
- * \brief   Library files with common functions for Gmaps_activity
+ * \brief   Library files with common functions for GmapsActivity
  */
 
 /**
- * Prepare array of tabs for Gmaps_activity
+ * Prepare array of tabs for GmapsActivity
  *
- * @param	Gmaps_activity	$object		Gmaps_activity
+ * @param	GmapsActivity	$object		GmapsActivity
  * @return 	array					Array of tabs
  */
-function gmaps_activityPrepareHead($object)
+function gmapsActivityPrepareHead($object)
 {
 	global $db, $langs, $conf;
 
@@ -55,7 +55,7 @@ function gmaps_activityPrepareHead($object)
 
 	require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 	require_once DOL_DOCUMENT_ROOT.'/core/class/link.class.php';
-	$upload_dir = $conf->gmaps->dir_output."/gmaps_activity/".dol_sanitizeFileName($object->ref);
+	$upload_dir = $conf->gmaps->dir_output."/gmapsactivity/".dol_sanitizeFileName($object->ref);
 	$nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
 	$nbLinks = Link::count($db, $object->element, $object->id);
 	$head[$h][0] = dol_buildpath("/gmaps/gmaps_activity_document.php", 1).'?id='.$object->id;
@@ -77,9 +77,9 @@ function gmaps_activityPrepareHead($object)
 	//$this->tabs = array(
 	//	'entity:-tabname:Title:@gmaps:/gmaps/mypage.php?id=__ID__'
 	//); // to remove a tab
-	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmaps_activity@gmaps');
+	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmapsactivity@gmaps');
 
-	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmaps_activity@gmaps', 'remove');
+	complete_head_from_modules($conf, $langs, $object, $head, $h, 'gmapsactivity@gmaps', 'remove');
 
 	return $head;
 }
