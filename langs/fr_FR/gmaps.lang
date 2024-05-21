@@ -50,12 +50,13 @@ MyWidgetDescription = Description de mon widget
 #
 # Menu
 #
-New_Gmaps_activity = Nouveau déplacement
-List_Gmaps_activity = Liste des déplacement
+New_GmapsActivity = Nouveau déplacement
+List_GmapsActivity = Liste des déplacement
 Alayse_KM=Analyse KM
 GmapsPrepareNDF= Générer les note de frais
 List_Gmaps_import=Import fichier Gmaps
 GmapsActivity=Activité Gmaps
+
 
 
 #
