@@ -67,6 +67,9 @@ GmapsAreaKM = Analyse KM
 GmapsAreaTemps = Analyse Temps (min.)
 GmapsArea = Traitement fichier GMaps
 CreateNDF = Créer les note de frais
+AffectThirdparty=Affecter le tiers sélectionné
+SetSatusCancelled=Annuler le déplacement
+
 
 #Field
 LatitudeStart = Latitude départ

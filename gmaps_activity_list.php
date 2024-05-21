@@ -252,7 +252,7 @@ if (empty($reshook)) {
 				if ($result < 0) {
 					setEventMessages($act->error, $act->errors, 'errors');
 				} elseif ($result > 0) {
-					$act->fk_soc = GETPOST('affect_fk_soc_' . $val);
+					$act->fk_soc = GETPOST('affect-'.$val.'-fk_soc' );
 					if ($act->fk_soc == -1) {
 						unset($act->fk_soc);
 					}
@@ -452,13 +452,14 @@ llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-gmaps pag
 print '<script type="text/javascript" language="javascript">
 		// Add code to auto check the box when we select an Thridparty
 		jQuery(document).ready(function() {
-			jQuery("[name^=\'affect_fk_soc_\']").change(function() {
-			let s=$(this).attr("id").replace("affect_fk_soc_", "");
+			jQuery("[name^=\'affect-\']").change(function() {
+			let s=$(this).attr("id").replace("affect-", "").replace("-fk_soc","");
+			console.log(s);
 			if ($(this).val() == -1) jQuery("#cb"+s).prop("checked", false);
 			else jQuery("#cb"+s).prop("checked", true);
 
 			// TODO run same script as on lick to display mass action list
-			initCheckForSelect(1);
+			initCheckForSelect(1,"massaction","checkforselect");
 			});
 		});
 </script>';
@@ -794,6 +795,20 @@ while ($i < $imaxinloop) {
 				print '>';
 				if ($key == 'status') {
 					print $object->getLibStatut(5);
+				} elseif ($key == 'fk_soc' && $permissiontoadd) {
+					#Spécial case of fk_soc to affect if
+					if (empty($object->$key)) {
+						$socid = $object->findThirdpartyLinked();
+						if ($socid < 0) {
+							setEventMessage($object->error, $object->errors, 'errors');
+						} elseif ($socid > 0) {
+							$arrayofselected[] = $object->id;
+						}
+					} else {
+						$socid = $object->$key;
+					}
+
+					print $object->showInputField($val, $key, $socid, '', '', 'affect-'.$object->id.'-', $cssforfield . ' maxwidth250', 1);
 				} elseif ($key == 'rowid') {
 					print $object->showOutputField($val, $key, $object->id, '');
 				} else {
