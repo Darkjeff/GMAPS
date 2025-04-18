@@ -57,7 +57,12 @@ GmapsPrepareNDF= Générer les note de frais
 List_Gmaps_import=Import fichier Gmaps
 GmapsActivity=Activité Gmaps
 
-
+# Import
+ModuleGMapsImport = "Importation GMAPS"
+FileToImport = "Fichier à importer"
+Import = "Importer"
+TargetMonth = "Mois cible"
+TargetMonthHelp = "Sélectionnez le mois pour lequel vous souhaitez importer les données. Si aucun mois n'est sélectionné, tous les mois seront importés."
 
 #
 # Page

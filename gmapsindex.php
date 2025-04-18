@@ -86,7 +86,17 @@ $permissiontoadd = 1;
 if ($action=='editfile') {
 	$action='';
 	$import = new gmapsImport($db);
-	$result = $import->importFile($upload_dir.'/'.GETPOST("urlfile"), $user);
+	
+	// Récupérer le mois cible s'il est spécifié
+	$targetMonth = GETPOST("targetMonth", 'alpha');
+	
+	// Si le mois cible est spécifié, l'utiliser pour l'importation
+	if (!empty($targetMonth)) {
+		$result = $import->splitAndImportFile($upload_dir.'/'.GETPOST("urlfile"), $user, $targetMonth);
+	} else {
+		$result = $import->splitAndImportFile($upload_dir.'/'.GETPOST("urlfile"), $user);
+	}
+	
 	if ($result < 0) {
 		setEventMessages($import->error,$import->errors,'errors');
 	} else {
@@ -129,6 +139,22 @@ if ($action == 'delete')
 
 print '<div class="fichecenter">';
 
+// Ajouter un champ pour sélectionner le mois cible
+print '<form method="post" action="'.$_SERVER["PHP_SELF"].'" enctype="multipart/form-data">';
+print '<input type="hidden" name="action" value="editfile">';
+print '<table class="border" width="100%">';
+print '<tr><td class="fieldrequired" width="25%">'.$langs->trans("FileToImport").'</td><td>';
+print '<input type="file" name="userfile" class="flat minwidth200">';
+print '</td></tr>';
+print '<tr><td>'.$langs->trans("TargetMonth").'</td><td>';
+print '<input type="month" name="targetMonth" class="flat">';
+print ' <span class="help">'.$langs->trans("TargetMonthHelp").'</span>';
+print '</td></tr>';
+print '</table>';
+print '<br><center>';
+print '<input type="submit" class="button" value="'.$langs->trans("Import").'">';
+print '</center>';
+print '</form>';
 
 $formfile->form_attach_new_file(
 	$_SERVER["PHP_SELF"].(empty($moreparam) ? '' : $moreparam),
@@ -143,7 +169,6 @@ $formfile->form_attach_new_file(
 	0,
 	0
 );
-
 
 $filearray = dol_dir_list($upload_dir, "files", 0, '', '(\.meta|_preview.*\.png)$', $sortfield, (strtolower($sortorder) == 'desc' ?SORT_DESC:SORT_ASC), 1);
 
@@ -169,9 +194,7 @@ $formfile->list_of_documents(
 	1
 );
 
-
 print '</div>';
-
 
 // End of page
 llxFooter();

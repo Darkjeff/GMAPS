@@ -1086,6 +1086,94 @@ class GmapsImport extends CommonObject
 
 
 	}
+
+	public function splitAndImportFile($file, $user, $targetMonth = null)
+	{
+		require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
+		global $conf, $langs;
+
+		$error = 0;
+		$this->output = '';
+		$this->error = '';
+
+		dol_syslog(__METHOD__, LOG_DEBUG);
+
+		if (!file_exists($file)) {
+			$this->error = $langs->trans('FileNotFound');
+			return -1;
+		}
+
+		$jsonObj = json_decode(file_get_contents($file));
+		if (!property_exists($jsonObj, 'timelineObjects') || !is_array($jsonObj->timelineObjects)) {
+			$this->error = $langs->trans('FileFormatSupported');
+			return -1;
+		}
+
+		// Regrouper les trajets par mois
+		$monthlyData = array();
+		foreach ($jsonObj->timelineObjects as $key => $data) {
+			if (property_exists($data, 'activitySegment') && 
+				property_exists($data->activitySegment, 'duration') &&
+				property_exists($data->activitySegment->duration, 'startTimestamp')) {
+				
+				$timestamp = dol_stringtotime($data->activitySegment->duration->startTimestamp);
+				$monthKey = date('Y-m', $timestamp);
+				
+				if (!isset($monthlyData[$monthKey])) {
+					$monthlyData[$monthKey] = array();
+				}
+				$monthlyData[$monthKey][] = $data;
+			}
+		}
+
+		// Si un mois cible est spécifié, ne traiter que ce mois
+		if ($targetMonth !== null) {
+			if (!isset($monthlyData[$targetMonth])) {
+				$this->error = $langs->trans('NoDataForMonth', $targetMonth);
+				return -1;
+			}
+			
+			// Créer et importer uniquement le fichier pour le mois spécifié
+			$monthlyJson = new stdClass();
+			$monthlyJson->timelineObjects = $monthlyData[$targetMonth];
+			
+			$upload_dir = $conf->gmaps->dir_output.'/gmaps_import/';
+			$monthlyFile = $upload_dir . 'import_' . $targetMonth . '.json';
+			file_put_contents($monthlyFile, json_encode($monthlyJson));
+			
+			// Importer le fichier mensuel
+			$result = $this->importFile($monthlyFile, $user);
+			if ($result < 0) {
+				$error++;
+				$this->errors = array_merge($this->errors, array("Error importing file for month $targetMonth"));
+			}
+			
+			// Supprimer le fichier temporaire
+			@unlink($monthlyFile);
+		} else {
+			// Comportement par défaut : importer tous les mois
+			$upload_dir = $conf->gmaps->dir_output.'/gmaps_import/';
+			foreach ($monthlyData as $month => $data) {
+				$monthlyJson = new stdClass();
+				$monthlyJson->timelineObjects = $data;
+				
+				$monthlyFile = $upload_dir . 'import_' . $month . '.json';
+				file_put_contents($monthlyFile, json_encode($monthlyJson));
+				
+				// Importer le fichier mensuel
+				$result = $this->importFile($monthlyFile, $user);
+				if ($result < 0) {
+					$error++;
+					$this->errors = array_merge($this->errors, array("Error importing file for month $month"));
+				}
+				
+				// Supprimer le fichier temporaire
+				@unlink($monthlyFile);
+			}
+		}
+
+		return $error ? -1 * $error : 1;
+	}
 }
 
 
